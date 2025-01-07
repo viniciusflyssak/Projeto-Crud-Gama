@@ -249,8 +249,8 @@ object FrmCadastroCliente: TFrmCadastroCliente
     TabOrder = 1
     ExplicitWidth = 1026
     object grdEnderecos: TDBGrid
-      Left = 3
-      Top = 30
+      Left = 8
+      Top = 22
       Width = 473
       Height = 120
       Hint = 'Informe o pre'#231'o por KG de roupas cobrados para este cliente.'
@@ -319,7 +319,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
-    ExplicitTop = 399
+    ExplicitTop = 402
     ExplicitWidth = 1026
     object btnSalvar: TSpeedButton
       Left = 927

@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, uFrmGerenciamentoClientes, uFrmGerenciamentoItens, uDM;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus,uDM, uFrmGerenciamentoClientes, uFrmGerenciamentoItens
+  , uFrmConfiguracaoFrete;
 
 type
   TfrmPrincipal = class(TForm)
@@ -17,6 +18,7 @@ type
     procedure Clientes1Click(Sender: TObject);
     procedure Itens1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure Configuraesdefret1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -39,6 +41,18 @@ begin
     frmGerenciamentoClientes.ShowModal;
   finally
     frmGerenciamentoClientes.Free;
+  end;
+end;
+
+procedure TfrmPrincipal.Configuraesdefret1Click(Sender: TObject);
+var
+  FrmConfiguracaoCartaFrete: TFrmConfiguracaoFrete;
+begin
+  FrmConfiguracaoCartaFrete := TFrmConfiguracaoFrete.Create(nil);
+  try
+    FrmConfiguracaoFrete.ShowModal;
+  finally
+    FrmConfiguracaoCartaFrete.Free;
   end;
 end;
 

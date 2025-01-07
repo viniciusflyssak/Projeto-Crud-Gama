@@ -34,6 +34,7 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Configura'#231#245'es'
       object Configuraesdefret1: TMenuItem
         Caption = 'Configura'#231#227'o de frete'
+        OnClick = Configuraesdefret1Click
       end
     end
   end
