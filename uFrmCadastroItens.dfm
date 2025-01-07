@@ -245,8 +245,10 @@ object FrmCadastroItens: TFrmCadastroItens
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      ItemIndex = 4
       ParentFont = False
       TabOrder = 5
+      Text = 'Outros'
       Items.Strings = (
         'Cama'
         'Banho'

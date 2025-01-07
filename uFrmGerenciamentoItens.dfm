@@ -22,6 +22,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
     Height = 401
     Align = alClient
     DataSource = dsItens
+    ReadOnly = True
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText

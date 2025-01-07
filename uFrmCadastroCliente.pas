@@ -191,6 +191,28 @@ begin
     raise Exception.Create('Nome deve ser informado!');
   end;
 
+  if mtEndereco.IsEmpty then
+  begin
+    grdEnderecos.SetFocus;
+    raise Exception.Create('Informe pelo menos um endereço!');
+  end;
+
+  mtEndereco.First;
+
+  while not(mtEndereco.Eof) do
+  begin
+    if ((trim(mtEndereco.FieldByName('ENDERECO').AsString) = '') or
+      (trim(mtEndereco.FieldByName('BAIRRO').AsString) = '')) then
+    begin
+      grdEnderecos.SetFocus;
+      raise Exception.Create('Endereço incompleto, verifique!');
+    end;
+
+    mtEndereco.Next;
+  end;
+
+  mtEndereco.First;
+
   DM.Conn.StartTransaction;
   try
     salvarCliente;
@@ -244,9 +266,9 @@ begin
       mmoObservacoes.Lines.Text := qryAux.FieldByName('OBSERVACOES').AsString;
       edtPrecoKg.Text := StringReplace(qryAux.FieldByName('PRECOPORKG')
         .AsString, '.', ',', [rfReplaceAll]);
-      if qryAux.FieldByName('STATUS').AsString = 'Ativo' then      
+      if qryAux.FieldByName('STATUS').AsString = 'Ativo' then
         cbStatus.ItemIndex := 0
-      else 
+      else
         cbStatus.ItemIndex := 1;
 
       qryAux.Close;

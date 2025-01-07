@@ -5,7 +5,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
   BorderStyle = bsSingle
   Caption = 'Gerenciamento de Clientes'
   ClientHeight = 442
-  ClientWidth = 628
+  ClientWidth = 629
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,7 +18,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
   object pnlBotoes: TPanel
     Left = 0
     Top = 401
-    Width = 628
+    Width = 629
     Height = 41
     Align = alBottom
     TabOrder = 0
@@ -43,7 +43,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
       ExplicitHeight = 25
     end
     object btnCadastrar: TSpeedButton
-      Left = 525
+      Left = 526
       Top = 1
       Width = 102
       Height = 39
@@ -61,7 +61,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
       ExplicitHeight = 25
     end
     object btnExcluir: TSpeedButton
-      Left = 321
+      Left = 322
       Top = 1
       Width = 102
       Height = 39
@@ -79,7 +79,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
       ExplicitHeight = 25
     end
     object SpeedButton1: TSpeedButton
-      Left = 423
+      Left = 424
       Top = 1
       Width = 102
       Height = 39
@@ -100,10 +100,11 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
   object grdClientes: TDBGrid
     Left = 0
     Top = 0
-    Width = 628
+    Width = 629
     Height = 401
     Align = alClient
     DataSource = dsClientes
+    ReadOnly = True
     TabOrder = 1
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText

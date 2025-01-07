@@ -120,6 +120,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 46
       Width = 121
       Height = 24
+      Hint = 'C'#243'digo do cliente gerado pelo sistema.'
       Enabled = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -127,20 +128,27 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
       ReadOnly = True
+      ShowHint = True
       TabOrder = 0
+      Text = 'C'#243'digo do cliente gerado pelo sistema.'
     end
     object edtNome: TEdit
       Left = 135
       Top = 46
       Width = 473
       Height = 23
+      Hint = 'Informe o nome completo do cliente.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
       Font.Name = 'Arial'
       Font.Style = []
+      MaxLength = 60
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
     end
     object mmoObservacoes: TMemo
@@ -148,12 +156,16 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 46
       Width = 185
       Height = 89
+      Hint = 'Informe detalhes adicionais sobre o cliente.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      MaxLength = 250
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 4
     end
     object cbStatus: TComboBox
@@ -161,6 +173,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 46
       Width = 86
       Height = 24
+      Hint = 'Selecione o status atual do cliente.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -169,6 +182,8 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Font.Style = []
       ItemIndex = 0
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 3
       Text = 'Ativo'
       Items.Strings = (
@@ -180,6 +195,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 46
       Width = 115
       Height = 24
+      Hint = 'Informe o telefone do cliente.'
       EditMask = '!\(99\)00000-0000;0;_'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -188,6 +204,8 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Font.Style = []
       MaxLength = 14
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
       Text = ''
     end
@@ -196,12 +214,15 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 111
       Width = 121
       Height = 24
+      Hint = 'Informe o pre'#231'o por KG de roupas cobrados para este cliente.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
       OnKeyPress = edtPrecoKgKeyPress
     end
@@ -232,6 +253,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 30
       Width = 473
       Height = 120
+      Hint = 'Informe o pre'#231'o por KG de roupas cobrados para este cliente.'
       DataSource = dsEndereco
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
