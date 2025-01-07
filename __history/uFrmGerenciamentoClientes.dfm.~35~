@@ -1,71 +1,27 @@
-object FrmGerenciamentoItens: TFrmGerenciamentoItens
+object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
   Left = 0
   Top = 0
-  Caption = 'Gerenciamento de itens'
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Gerenciamento de Clientes'
   ClientHeight = 442
-  ClientWidth = 628
+  ClientWidth = 629
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poScreenCenter
+  OnShow = FormShow
   TextHeight = 15
-  object grdClientes: TDBGrid
-    Left = 0
-    Top = 0
-    Width = 628
-    Height = 401
-    Align = alClient
-    DataSource = dsItens
-    TabOrder = 0
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -12
-    TitleFont.Name = 'Segoe UI'
-    TitleFont.Style = []
-    Columns = <
-      item
-        Expanded = False
-        FieldName = 'CODIGO'
-        Title.Caption = 'C'#243'digo'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'DESCRICAO'
-        Title.Caption = 'Descri'#231#227'o'
-        Width = 236
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'GRUPO'
-        Title.Caption = 'Grupo'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'PRECO'
-        Title.Caption = 'Pre'#231'o (R$)'
-        Width = 103
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'STATUS'
-        Title.Caption = 'Status'
-        Width = 62
-        Visible = True
-      end>
-  end
   object pnlBotoes: TPanel
     Left = 0
     Top = 401
-    Width = 628
+    Width = 629
     Height = 41
     Align = alBottom
-    TabOrder = 1
+    TabOrder = 0
     ExplicitTop = 400
     ExplicitWidth = 624
     object btnCancelar: TSpeedButton
@@ -87,7 +43,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
       ExplicitHeight = 25
     end
     object btnCadastrar: TSpeedButton
-      Left = 525
+      Left = 526
       Top = 1
       Width = 102
       Height = 39
@@ -105,7 +61,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
       ExplicitHeight = 25
     end
     object btnExcluir: TSpeedButton
-      Left = 321
+      Left = 322
       Top = 1
       Width = 102
       Height = 39
@@ -123,7 +79,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
       ExplicitHeight = 25
     end
     object SpeedButton1: TSpeedButton
-      Left = 423
+      Left = 424
       Top = 1
       Width = 102
       Height = 39
@@ -135,12 +91,68 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
       Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
+      OnClick = SpeedButton1Click
       ExplicitLeft = 688
       ExplicitTop = 8
       ExplicitHeight = 25
     end
   end
-  object mtItens: TFDMemTable
+  object grdClientes: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 629
+    Height = 401
+    Align = alClient
+    DataSource = dsClientes
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 1
+    TitleFont.Charset = ANSI_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -13
+    TitleFont.Name = 'Arial'
+    TitleFont.Style = [fsBold]
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'CODIGO'
+        Title.Caption = 'C'#243'digo'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NOME'
+        Title.Caption = 'Nome'
+        Width = 235
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TELEFONE'
+        Title.Caption = 'Telefone'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PRECOPORKG'
+        Title.Caption = 'Pre'#231'o por KG'
+        Width = 99
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'STATUS'
+        Title.Caption = 'Status'
+        Width = 62
+        Visible = True
+      end>
+  end
+  object mtClientes: TFDMemTable
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
     ResourceOptions.AssignedValues = [rvSilentMode]
@@ -150,24 +162,24 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
     UpdateOptions.AutoCommitUpdates = True
     Left = 536
     Top = 328
-    object mtItensCODIGO: TIntegerField
+    object mtClientesCODIGO: TIntegerField
       FieldName = 'CODIGO'
     end
-    object mtItensDESCRICAO: TStringField
-      FieldName = 'DESCRICAO'
+    object mtClientesNOME: TStringField
+      FieldName = 'NOME'
     end
-    object mtItensPRECO: TCurrencyField
-      FieldName = 'PRECO'
-    end
-    object mtItensGRUPO: TStringField
-      FieldName = 'GRUPO'
-    end
-    object mtItensSTATUS: TStringField
+    object mtClientesSTATUS: TStringField
       FieldName = 'STATUS'
     end
+    object mtClientesTELEFONE: TStringField
+      FieldName = 'TELEFONE'
+    end
+    object mtClientesPRECOPORKG: TCurrencyField
+      FieldName = 'PRECOPORKG'
+    end
   end
-  object dsItens: TDataSource
-    DataSet = mtItens
+  object dsClientes: TDataSource
+    DataSet = mtClientes
     Left = 504
     Top = 328
   end

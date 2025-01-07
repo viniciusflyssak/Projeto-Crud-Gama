@@ -73,7 +73,7 @@ object FrmCadastroItens: TFrmCadastroItens
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
-    Font.Name = 'Tahoma'
+    Font.Name = 'Arial'
     Font.Style = [fsBold]
     HeaderFont.Charset = ANSI_CHARSET
     HeaderFont.Color = clWindowText
@@ -85,26 +85,26 @@ object FrmCadastroItens: TFrmCadastroItens
     object lblCodigo: TLabel
       Left = 8
       Top = 24
-      Width = 51
+      Width = 50
       Height = 16
       Caption = 'C'#243'digo*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblDescricao: TLabel
       Left = 135
       Top = 24
-      Width = 71
+      Width = 67
       Height = 16
       Caption = 'Descri'#231#227'o*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -124,39 +124,39 @@ object FrmCadastroItens: TFrmCadastroItens
     object lblPreco: TLabel
       Left = 455
       Top = 24
-      Width = 78
+      Width = 70
       Height = 16
       Caption = 'Pre'#231'o (R$)*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblStatus: TLabel
       Left = 729
       Top = 24
-      Width = 51
+      Width = 44
       Height = 16
       Caption = 'Status*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblGrupo: TLabel
       Left = 582
       Top = 24
-      Width = 46
+      Width = 44
       Height = 16
       Caption = 'Grupo*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -165,6 +165,7 @@ object FrmCadastroItens: TFrmCadastroItens
       Top = 46
       Width = 121
       Height = 24
+      Hint = 'C'#243'digo do item gerado pelo sistema.'
       Enabled = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -172,20 +173,27 @@ object FrmCadastroItens: TFrmCadastroItens
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
       ReadOnly = True
+      ShowHint = True
       TabOrder = 0
+      Text = 'C'#243'digo do item gerado pelo sistema.'
     end
     object edtDescricao: TEdit
       Left = 135
       Top = 46
       Width = 314
-      Height = 23
+      Height = 24
+      Hint = 'Informe a descri'#231#227'o do item.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -12
+      Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      MaxLength = 60
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
     end
     object mmoObservacoes: TMemo
@@ -206,12 +214,15 @@ object FrmCadastroItens: TFrmCadastroItens
       Top = 46
       Width = 121
       Height = 24
+      Hint = 'Informe o pre'#231'o do item para clientes gerais.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 3
       OnKeyPress = edtPrecoKeyPress
     end
@@ -220,6 +231,7 @@ object FrmCadastroItens: TFrmCadastroItens
       Top = 46
       Width = 86
       Height = 24
+      Hint = 'Selecione o status atual do item.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -228,6 +240,8 @@ object FrmCadastroItens: TFrmCadastroItens
       Font.Style = []
       ItemIndex = 0
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 4
       Text = 'Ativo'
       Items.Strings = (
@@ -239,6 +253,7 @@ object FrmCadastroItens: TFrmCadastroItens
       Top = 46
       Width = 141
       Height = 24
+      Hint = 'Selecione o grupo deste item.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -247,6 +262,8 @@ object FrmCadastroItens: TFrmCadastroItens
       Font.Style = []
       ItemIndex = 4
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
       Text = 'Outros'
       Items.Strings = (

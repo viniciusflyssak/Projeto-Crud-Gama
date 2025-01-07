@@ -4,7 +4,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Cadastro de cliente'
-  ClientHeight = 442
+  ClientHeight = 445
   ClientWidth = 1030
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -27,7 +27,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
-    Font.Name = 'Tahoma'
+    Font.Name = 'Arial'
     Font.Style = [fsBold]
     HeaderFont.Charset = ANSI_CHARSET
     HeaderFont.Color = clWindowText
@@ -40,26 +40,26 @@ object FrmCadastroCliente: TFrmCadastroCliente
     object lblCodigo: TLabel
       Left = 8
       Top = 24
-      Width = 51
+      Width = 50
       Height = 16
       Caption = 'C'#243'digo*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblNome: TLabel
       Left = 135
       Top = 24
-      Width = 43
+      Width = 42
       Height = 16
       Caption = 'Nome*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -72,46 +72,46 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblStatus: TLabel
       Left = 739
       Top = 24
-      Width = 51
+      Width = 44
       Height = 16
       Caption = 'Status*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblObservacoes: TLabel
       Left = 831
       Top = 24
-      Width = 84
+      Width = 81
       Height = 16
       Caption = 'Observa'#231#245'es'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblValorKg: TLabel
       Left = 8
       Top = 89
-      Width = 112
+      Width = 109
       Height = 16
       Caption = 'Pre'#231'o por KG(R$)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -238,7 +238,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
-    Font.Name = 'Tahoma'
+    Font.Name = 'Arial'
     Font.Style = [fsBold]
     HeaderFont.Charset = ANSI_CHARSET
     HeaderFont.Color = clWindowText
@@ -265,7 +265,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
       TitleFont.Charset = ANSI_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -16
-      TitleFont.Name = 'Tahoma'
+      TitleFont.Name = 'Arial'
       TitleFont.Style = [fsBold]
       OnKeyDown = grdEnderecosKeyDown
       Columns = <
@@ -308,10 +308,16 @@ object FrmCadastroCliente: TFrmCadastroCliente
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 400
+    Top = 403
     Width = 1030
     Height = 42
     Align = alBottom
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 2
     ExplicitTop = 399
     ExplicitWidth = 1026

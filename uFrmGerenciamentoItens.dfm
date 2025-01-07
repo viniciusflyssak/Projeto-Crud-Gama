@@ -5,7 +5,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
   BorderStyle = bsSingle
   Caption = 'Gerenciamento de itens'
   ClientHeight = 442
-  ClientWidth = 628
+  ClientWidth = 660
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,17 +18,23 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
   object grdClientes: TDBGrid
     Left = 0
     Top = 0
-    Width = 628
+    Width = 660
     Height = 401
     Align = alClient
     DataSource = dsItens
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
     ReadOnly = True
     TabOrder = 0
-    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Charset = ANSI_CHARSET
     TitleFont.Color = clWindowText
-    TitleFont.Height = -12
-    TitleFont.Name = 'Segoe UI'
-    TitleFont.Style = []
+    TitleFont.Height = -13
+    TitleFont.Name = 'Arial'
+    TitleFont.Style = [fsBold]
     Columns = <
       item
         Expanded = False
@@ -67,7 +73,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
   object pnlBotoes: TPanel
     Left = 0
     Top = 401
-    Width = 628
+    Width = 660
     Height = 41
     Align = alBottom
     TabOrder = 1
@@ -92,7 +98,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
       ExplicitHeight = 25
     end
     object btnCadastrar: TSpeedButton
-      Left = 525
+      Left = 557
       Top = 1
       Width = 102
       Height = 39
@@ -110,7 +116,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
       ExplicitHeight = 25
     end
     object btnExcluir: TSpeedButton
-      Left = 321
+      Left = 353
       Top = 1
       Width = 102
       Height = 39
@@ -128,7 +134,7 @@ object FrmGerenciamentoItens: TFrmGerenciamentoItens
       ExplicitHeight = 25
     end
     object SpeedButton1: TSpeedButton
-      Left = 423
+      Left = 455
       Top = 1
       Width = 102
       Height = 39

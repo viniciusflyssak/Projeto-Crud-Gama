@@ -4,7 +4,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Cadastro de cliente'
-  ClientHeight = 442
+  ClientHeight = 445
   ClientWidth = 1030
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -27,7 +27,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
-    Font.Name = 'Tahoma'
+    Font.Name = 'Arial'
     Font.Style = [fsBold]
     HeaderFont.Charset = ANSI_CHARSET
     HeaderFont.Color = clWindowText
@@ -40,26 +40,26 @@ object FrmCadastroCliente: TFrmCadastroCliente
     object lblCodigo: TLabel
       Left = 8
       Top = 24
-      Width = 51
+      Width = 50
       Height = 16
       Caption = 'C'#243'digo*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblNome: TLabel
       Left = 135
       Top = 24
-      Width = 43
+      Width = 42
       Height = 16
       Caption = 'Nome*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -72,46 +72,46 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblStatus: TLabel
       Left = 739
       Top = 24
-      Width = 51
+      Width = 44
       Height = 16
       Caption = 'Status*'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblObservacoes: TLabel
       Left = 831
       Top = 24
-      Width = 84
+      Width = 81
       Height = 16
       Caption = 'Observa'#231#245'es'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblValorKg: TLabel
       Left = 8
       Top = 89
-      Width = 112
+      Width = 109
       Height = 16
       Caption = 'Pre'#231'o por KG(R$)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'Tahoma'
+      Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -128,7 +128,9 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
       ReadOnly = True
+      ShowHint = True
       TabOrder = 0
       Text = 'C'#243'digo do cliente gerado pelo sistema.'
     end
@@ -137,13 +139,16 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 46
       Width = 473
       Height = 23
-      Hint = 'Selecione o status atual do cliente.'
+      Hint = 'Informe o nome completo do cliente.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
       Font.Name = 'Arial'
       Font.Style = []
+      MaxLength = 60
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
     end
     object mmoObservacoes: TMemo
@@ -151,12 +156,16 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 46
       Width = 185
       Height = 89
+      Hint = 'Informe detalhes adicionais sobre o cliente.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      MaxLength = 250
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 4
     end
     object cbStatus: TComboBox
@@ -173,6 +182,8 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Font.Style = []
       ItemIndex = 0
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 3
       Text = 'Ativo'
       Items.Strings = (
@@ -184,6 +195,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 46
       Width = 115
       Height = 24
+      Hint = 'Informe o telefone do cliente.'
       EditMask = '!\(99\)00000-0000;0;_'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -192,6 +204,8 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Font.Style = []
       MaxLength = 14
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
       Text = ''
     end
@@ -200,12 +214,15 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 111
       Width = 121
       Height = 24
+      Hint = 'Informe o pre'#231'o por KG de roupas cobrados para este cliente.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
       OnKeyPress = edtPrecoKgKeyPress
     end
@@ -221,7 +238,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
-    Font.Name = 'Tahoma'
+    Font.Name = 'Arial'
     Font.Style = [fsBold]
     HeaderFont.Charset = ANSI_CHARSET
     HeaderFont.Color = clWindowText
@@ -236,6 +253,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Top = 30
       Width = 473
       Height = 120
+      Hint = 'Informe o pre'#231'o por KG de roupas cobrados para este cliente.'
       DataSource = dsEndereco
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -290,7 +308,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 400
+    Top = 403
     Width = 1030
     Height = 42
     Align = alBottom

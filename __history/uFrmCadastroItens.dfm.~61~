@@ -123,7 +123,7 @@ object FrmCadastroItens: TFrmCadastroItens
     end
     object lblPreco: TLabel
       Left = 455
-      Top = 23
+      Top = 24
       Width = 78
       Height = 16
       Caption = 'Pre'#231'o (R$)*'
@@ -136,7 +136,7 @@ object FrmCadastroItens: TFrmCadastroItens
     end
     object lblStatus: TLabel
       Left = 729
-      Top = 23
+      Top = 24
       Width = 51
       Height = 16
       Caption = 'Status*'
@@ -148,8 +148,8 @@ object FrmCadastroItens: TFrmCadastroItens
       ParentFont = False
     end
     object lblGrupo: TLabel
-      Left = 585
-      Top = 23
+      Left = 582
+      Top = 24
       Width = 46
       Height = 16
       Caption = 'Grupo*'
@@ -165,6 +165,7 @@ object FrmCadastroItens: TFrmCadastroItens
       Top = 46
       Width = 121
       Height = 24
+      Hint = 'C'#243'digo do item gerado pelo sistema.'
       Enabled = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -174,6 +175,7 @@ object FrmCadastroItens: TFrmCadastroItens
       ParentFont = False
       ReadOnly = True
       TabOrder = 0
+      Text = 'C'#243'digo do item gerado pelo sistema.'
     end
     object edtDescricao: TEdit
       Left = 135
@@ -203,7 +205,7 @@ object FrmCadastroItens: TFrmCadastroItens
     end
     object edtPreco: TEdit
       Left = 455
-      Top = 45
+      Top = 46
       Width = 121
       Height = 24
       Font.Charset = ANSI_CHARSET
@@ -217,9 +219,10 @@ object FrmCadastroItens: TFrmCadastroItens
     end
     object cbStatus: TComboBox
       Left = 729
-      Top = 45
+      Top = 46
       Width = 86
       Height = 24
+      Hint = 'Selecione o status atual do item.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -234,9 +237,9 @@ object FrmCadastroItens: TFrmCadastroItens
         'Ativo'
         'Inativo')
     end
-    object ComboBox1: TComboBox
+    object cbGrupos: TComboBox
       Left = 582
-      Top = 45
+      Top = 46
       Width = 141
       Height = 24
       Style = csDropDownList
@@ -245,8 +248,10 @@ object FrmCadastroItens: TFrmCadastroItens
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      ItemIndex = 4
       ParentFont = False
       TabOrder = 5
+      Text = 'Outros'
       Items.Strings = (
         'Cama'
         'Banho'

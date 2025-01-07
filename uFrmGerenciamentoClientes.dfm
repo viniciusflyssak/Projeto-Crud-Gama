@@ -5,7 +5,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
   BorderStyle = bsSingle
   Caption = 'Gerenciamento de Clientes'
   ClientHeight = 442
-  ClientWidth = 629
+  ClientWidth = 658
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,7 +18,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
   object pnlBotoes: TPanel
     Left = 0
     Top = 401
-    Width = 629
+    Width = 658
     Height = 41
     Align = alBottom
     TabOrder = 0
@@ -43,7 +43,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
       ExplicitHeight = 25
     end
     object btnCadastrar: TSpeedButton
-      Left = 526
+      Left = 555
       Top = 1
       Width = 102
       Height = 39
@@ -61,7 +61,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
       ExplicitHeight = 25
     end
     object btnExcluir: TSpeedButton
-      Left = 322
+      Left = 351
       Top = 1
       Width = 102
       Height = 39
@@ -79,7 +79,7 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
       ExplicitHeight = 25
     end
     object SpeedButton1: TSpeedButton
-      Left = 424
+      Left = 453
       Top = 1
       Width = 102
       Height = 39
@@ -100,17 +100,23 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
   object grdClientes: TDBGrid
     Left = 0
     Top = 0
-    Width = 629
+    Width = 658
     Height = 401
     Align = alClient
     DataSource = dsClientes
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
     ReadOnly = True
     TabOrder = 1
-    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Charset = ANSI_CHARSET
     TitleFont.Color = clWindowText
-    TitleFont.Height = -12
-    TitleFont.Name = 'Segoe UI'
-    TitleFont.Style = []
+    TitleFont.Height = -13
+    TitleFont.Name = 'Arial'
+    TitleFont.Style = [fsBold]
     Columns = <
       item
         Expanded = False
