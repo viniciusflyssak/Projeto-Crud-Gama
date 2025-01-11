@@ -105,9 +105,9 @@ object FrmCadastroCliente: TFrmCadastroCliente
     object lblValorKg: TLabel
       Left = 8
       Top = 89
-      Width = 109
+      Width = 113
       Height = 16
-      Caption = 'Pre'#231'o por KG(R$)'
+      Caption = 'Pre'#231'o por KG (R$)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -121,6 +121,7 @@ object FrmCadastroCliente: TFrmCadastroCliente
       Width = 121
       Height = 24
       Hint = 'C'#243'digo do cliente gerado pelo sistema.'
+      Color = clSilver
       Enabled = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText

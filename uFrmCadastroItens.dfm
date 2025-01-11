@@ -24,7 +24,7 @@ object FrmCadastroItens: TFrmCadastroItens
     Align = alBottom
     TabOrder = 0
     ExplicitTop = 399
-    ExplicitWidth = 826
+    ExplicitWidth = 820
     object btnSalvar: TSpeedButton
       Left = 721
       Top = 1
@@ -82,6 +82,7 @@ object FrmCadastroItens: TFrmCadastroItens
     HeaderFont.Style = [fsBold]
     ParentFont = False
     TabOrder = 1
+    ExplicitWidth = 820
     object lblCodigo: TLabel
       Left = 8
       Top = 24
@@ -166,6 +167,7 @@ object FrmCadastroItens: TFrmCadastroItens
       Width = 121
       Height = 24
       Hint = 'C'#243'digo do item gerado pelo sistema.'
+      Color = clSilver
       Enabled = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText

@@ -10,7 +10,8 @@ uses
   uFrmGerenciamentoClientes in 'uFrmGerenciamentoClientes.pas' {FrmGerenciamentoClientes},
   uFrmCadastroItens in 'uFrmCadastroItens.pas' {FrmCadastroItens},
   uFrmGerenciamentoItens in 'uFrmGerenciamentoItens.pas' {FrmGerenciamentoItens},
-  uFrmConfiguracaoFrete in 'uFrmConfiguracaoFrete.pas' {FrmConfiguracaoFrete};
+  uFrmConfiguracaoFrete in 'uFrmConfiguracaoFrete.pas' {FrmConfiguracaoFrete},
+  uFrmEmitirPedido in 'uFrmEmitirPedido.pas' {FrmEmitirPedido};
 
 {$R *.res}
 
@@ -24,5 +25,6 @@ begin
   Application.CreateForm(TFrmCadastroItens, FrmCadastroItens);
   Application.CreateForm(TFrmGerenciamentoItens, FrmGerenciamentoItens);
   Application.CreateForm(TFrmConfiguracaoFrete, FrmConfiguracaoFrete);
+  Application.CreateForm(TFrmEmitirPedido, FrmEmitirPedido);
   Application.Run;
 end.

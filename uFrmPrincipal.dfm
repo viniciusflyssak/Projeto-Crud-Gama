@@ -37,5 +37,12 @@ object frmPrincipal: TfrmPrincipal
         OnClick = Configuraesdefret1Click
       end
     end
+    object Processos1: TMenuItem
+      Caption = 'Processos'
+      object EmissodePedido1: TMenuItem
+        Caption = 'Emiss'#227'o de Pedido'
+        OnClick = EmissodePedido1Click
+      end
+    end
   end
 end
