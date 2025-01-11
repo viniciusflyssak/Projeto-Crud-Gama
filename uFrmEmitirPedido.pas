@@ -9,7 +9,7 @@ uses
   Vcl.Grids, Vcl.DBGrids, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Buttons,
-  Vcl.ExtCtrls, FireDAC.DApt, uDM, Vcl.ComCtrls, DateUtils;
+  Vcl.ExtCtrls, FireDAC.DApt, uDM, Vcl.ComCtrls, DateUtils, frxClass;
 
 type
   TFrmEmitirPedido = class(TForm)
@@ -62,6 +62,8 @@ type
     IntegerField1: TIntegerField;
     IntegerField2: TIntegerField;
     StringField1: TStringField;
+    frxImpressaoItens: TfrxReport;
+    frxImpressaoQtdeKgs: TfrxReport;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);

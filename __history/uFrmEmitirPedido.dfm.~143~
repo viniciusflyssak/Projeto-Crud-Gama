@@ -230,15 +230,19 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 103
       Width = 186
       Height = 24
+      Hint = 'Informe a data de previs'#227'o de entrega do pedido.'
       Date = 45666.000000000000000000
-      Format = 'dd/mm/yyyy hh:mm'
-      Time = 0.986722129629924900
+      Format = 'dd/MM/yyyy HH:mm'
+      Time = 0.528379629628034300
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      Kind = dtkDateTime
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
     end
     object dtEmissao: TDateTimePicker
@@ -246,15 +250,19 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 103
       Width = 186
       Height = 24
+      Hint = 'Informe a data de emiss'#227'o do pedido'
       Date = 45666.000000000000000000
-      Format = 'dd/mm/yyyy hh:mm'
+      Format = 'dd/MM/yyyy HH:mm'
       Time = 0.986722129629924900
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      Kind = dtkDateTime
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 6
     end
   end
@@ -655,9 +663,6 @@ object FrmEmitirPedido: TFrmEmitirPedido
     object mtItensCODIGOITEMPEDIDO: TIntegerField
       FieldName = 'CODIGOITEMPEDIDO'
     end
-    object mtItensITEMID: TIntegerField
-      FieldName = 'ITEMID'
-    end
     object mtItensITEM: TStringField
       FieldName = 'ITEM'
       OnChange = mtItensITEMChange
@@ -703,5 +708,26 @@ object FrmEmitirPedido: TFrmEmitirPedido
       FieldName = 'ITEM'
       OnChange = mtItensITEMChange
     end
+  end
+  object frxImpressaoItens: TfrxReport
+    Version = '2022.1.3'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Padr'#227'o'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 45668.122507962970000000
+    ReportOptions.LastChange = 45668.122507962970000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 576
+    Top = 281
+    Datasets = <>
+    Variables = <>
+    Style = <>
   end
 end
