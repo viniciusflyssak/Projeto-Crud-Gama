@@ -153,7 +153,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 46
       Width = 336
       Height = 24
-      Hint = 'Selecione o status atual do cliente.'
+      Hint = 'Informe o endere'#231'o de entrega deste pedido.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -164,13 +164,14 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+      OnSelect = cbEnderecoSelect
     end
     object cbCliente: TComboBox
       Left = 135
       Top = 46
       Width = 473
       Height = 24
-      Hint = 'Selecione o status atual do cliente.'
+      Hint = 'Informe o cliente do pedido.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -188,7 +189,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 103
       Width = 155
       Height = 24
-      Hint = 'Selecione o status atual do item.'
+      Hint = 'Selecione o status atual do pedido.'
       Style = csDropDownList
       Color = clSilver
       Enabled = False
@@ -229,6 +230,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 103
       Width = 186
       Height = 24
+      Hint = 'Informe a data de previs'#227'o de entrega do pedido.'
       Date = 45666.000000000000000000
       Format = 'dd/mm/yyyy hh:mm'
       Time = 0.986722129629924900
@@ -238,6 +240,8 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
     end
     object dtEmissao: TDateTimePicker
@@ -245,6 +249,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 103
       Width = 186
       Height = 24
+      Hint = 'Informe a data de emiss'#227'o do pedido'
       Date = 45666.000000000000000000
       Format = 'dd/mm/yyyy hh:mm'
       Time = 0.986722129629924900
@@ -254,6 +259,8 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 6
     end
   end
@@ -439,6 +446,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ReadOnly = True
       ShowHint = True
       TabOrder = 3
+      OnChange = edtValorTotalItensChange
     end
   end
   object cbFrete: TGroupBox
@@ -519,6 +527,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ShowHint = True
       TabOrder = 0
       Text = 'Nenhum'
+      OnSelect = cbEnderecoSelect
       Items.Strings = (
         'Nenhum'
         'Buscar e Levar'
@@ -540,6 +549,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+      OnChange = edtValorTotalItensChange
     end
     object edtValorTotalPedido: TEdit
       Left = 347
@@ -651,10 +661,48 @@ object FrmEmitirPedido: TFrmEmitirPedido
     object mtItensCODIGOITEMPEDIDO: TIntegerField
       FieldName = 'CODIGOITEMPEDIDO'
     end
-    object mtItensITEMID: TIntegerField
+    object mtItensITEM: TStringField
+      FieldName = 'ITEM'
+      OnChange = mtItensITEMChange
+    end
+  end
+  object mtTempTable: TFDMemTable
+    FieldDefs = <>
+    IndexDefs = <
+      item
+        Name = 'FDMemTable1Index1'
+      end>
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    StoreDefs = True
+    Left = 720
+    Top = 481
+    object FloatField1: TFloatField
+      FieldName = 'QUANTIDADE'
+      OnChange = mtItensQUANTIDADEChange
+    end
+    object CurrencyField1: TCurrencyField
+      FieldName = 'VALORUNITARIO'
+      OnChange = mtItensQUANTIDADEChange
+    end
+    object CurrencyField2: TCurrencyField
+      FieldName = 'VALORTOTALITEM'
+    end
+    object BooleanField1: TBooleanField
+      FieldName = 'DELETAR'
+    end
+    object IntegerField1: TIntegerField
+      FieldName = 'CODIGOITEMPEDIDO'
+    end
+    object IntegerField2: TIntegerField
       FieldName = 'ITEMID'
     end
-    object mtItensITEM: TStringField
+    object StringField1: TStringField
       FieldName = 'ITEM'
       OnChange = mtItensITEMChange
     end

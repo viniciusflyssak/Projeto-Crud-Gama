@@ -232,13 +232,14 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Height = 24
       Hint = 'Informe a data de previs'#227'o de entrega do pedido.'
       Date = 45666.000000000000000000
-      Format = 'dd/mm/yyyy hh:mm'
-      Time = 0.986722129629924900
+      Format = 'dd/MM/yyyy HH:mm'
+      Time = 0.528379629628034300
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      Kind = dtkDateTime
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -251,13 +252,14 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Height = 24
       Hint = 'Informe a data de emiss'#227'o do pedido'
       Date = 45666.000000000000000000
-      Format = 'dd/mm/yyyy hh:mm'
+      Format = 'dd/MM/yyyy HH:mm'
       Time = 0.986722129629924900
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Arial'
       Font.Style = []
+      Kind = dtkDateTime
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -660,9 +662,6 @@ object FrmEmitirPedido: TFrmEmitirPedido
     end
     object mtItensCODIGOITEMPEDIDO: TIntegerField
       FieldName = 'CODIGOITEMPEDIDO'
-    end
-    object mtItensITEMID: TIntegerField
-      FieldName = 'ITEMID'
     end
     object mtItensITEM: TStringField
       FieldName = 'ITEM'

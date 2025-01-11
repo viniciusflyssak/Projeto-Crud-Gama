@@ -9,7 +9,7 @@ uses
   Vcl.Grids, Vcl.DBGrids, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Buttons,
-  Vcl.ExtCtrls, FireDAC.DApt, uDM, Vcl.ComCtrls;
+  Vcl.ExtCtrls, FireDAC.DApt, uDM, Vcl.ComCtrls, DateUtils;
 
 type
   TFrmEmitirPedido = class(TForm)
@@ -53,7 +53,6 @@ type
     mtItensCODIGOITEMPEDIDO: TIntegerField;
     dtPrevisaoEntrega: TDateTimePicker;
     dtEmissao: TDateTimePicker;
-    mtItensITEMID: TIntegerField;
     mtItensITEM: TStringField;
     mtTempTable: TFDMemTable;
     FloatField1: TFloatField;
@@ -75,6 +74,7 @@ type
     procedure mtItensQUANTIDADEChange(Sender: TField);
     procedure edtQtdeKgChange(Sender: TObject);
     procedure cbEnderecoSelect(Sender: TObject);
+    procedure edtValorTotalItensChange(Sender: TObject);
   private
     { Private declarations }
     function retornaCodigo(Sender: TComboBox): integer;
@@ -96,7 +96,150 @@ begin
 end;
 
 procedure TFrmEmitirPedido.btnSalvarClick(Sender: TObject);
+var
+  idPedidoGerado: integer;
+  procedure salvarPedido;
+  var
+    qrySalvarPedido: TFDQuery;
+  begin
+    qrySalvarPedido := TFDQuery.Create(nil);
+    try
+      qrySalvarPedido.Connection := DM.Conn;
+      qrySalvarPedido.SQL.Text :=
+        'INSERT INTO PEDIDOS (CODIGOPEDIDO, STATUS, CLIENTEID, ENDERECOENTREGAID, EMISSAO, PREVISAOENTREGA, VALORTOTALPEDIDO) VALUES '
+        + '(DEFAULT, :pStatus, :pClientId, :pEnderecoEntregaId, :pEmissao, :pPrevisaoEntrega, :pValorTotalPedido)';
+      qrySalvarPedido.Params.ParamByName('pStatus').AsString :=
+        cbStatus.Items[cbStatus.ItemIndex + 1];
+      qrySalvarPedido.Params.ParamByName('pClientId').AsInteger :=
+        retornaCodigo(cbCliente);
+      qrySalvarPedido.Params.ParamByName('pEnderecoEntregaId').AsInteger :=
+        retornaCodigo(cbEndereco);
+      qrySalvarPedido.Params.ParamByName('pEmissao').AsDateTime :=
+        dtEmissao.DateTime;
+      qrySalvarPedido.Params.ParamByName('pPrevisaoEntrega').AsDateTime :=
+        dtPrevisaoEntrega.DateTime;
+      qrySalvarPedido.Params.ParamByName('pValorTotalPedido').AsCurrency :=
+        StrToCurrDef(edtValorTotalPedido.Text, 0);
+      qrySalvarPedido.ExecSQL;
+    finally
+      qrySalvarPedido.Free;
+    end;
+  end;
+
+  procedure salvarItensPedido(idPedidoGerado: integer);
+  var
+    qrySalvarItens: TFDQuery;
+  begin
+    qrySalvarItens := TFDQuery.Create(nil);
+    try
+      qrySalvarItens.Connection := DM.Conn;
+      mtItens.Filtered := false;
+
+      mtItens.First;
+
+      while not(mtItens.Eof) do
+      begin
+        if not(Trim(mtItens.FieldByName('ITEM').AsString) = '') and
+          not(mtItens.FieldByName('DELETAR').AsBoolean) and
+          not(mtItens.FieldByName('QUANTIDADE').AsCurrency = 0) then
+        begin
+          qrySalvarItens.Close;
+          qrySalvarItens.SQL.Clear;
+          qrySalvarItens.SQL.Text :=
+            'INSERT INTO ITENSPEDIDOS (CODIGOITEMPEDIDO, CODIGOPEDIDO, ITEMID, QUANTIDADE, VALORUNITARIO, VALORTOTALITEM) VALUES '
+            + '(DEFAULT, :pCodigoPedido, :pItemId, :pQuantidade, :pValorUnitario, :pValorTotalItem)';
+          qrySalvarItens.Params.ParamByName('pCodigoPedido').AsInteger :=
+            idPedidoGerado;
+          qrySalvarItens.Params.ParamByName('pItemId').AsInteger :=
+            StrToIntDef(Copy(mtItens.FieldByName('ITEM').AsString, 1,
+            Pos(' -', mtItens.FieldByName('ITEM').AsString) - 1), 0);
+          qrySalvarItens.Params.ParamByName('pQuantidade').AsFloat :=
+            mtItens.FieldByName('QUANTIDADE').AsFloat;
+          qrySalvarItens.Params.ParamByName('pValorUnitario').AsCurrency :=
+            mtItens.FieldByName('VALORUNITARIO').AsCurrency;
+          qrySalvarItens.Params.ParamByName('pValorTotalItem').AsCurrency :=
+            mtItens.FieldByName('VALORTOTALITEM').AsCurrency;
+          qrySalvarItens.ExecSQL;
+        end;
+        mtItens.Next;
+      end;
+    finally
+      qrySalvarItens.Free;
+    end;
+  end;
+
+  procedure salvarFretePedido(idPedidoGerado: integer);
+  var
+    qrySalvarFrete: TFDQuery;
+  begin
+    qrySalvarFrete := TFDQuery.Create(nil);
+    try
+      qrySalvarFrete.Connection := DM.Conn;
+      qrySalvarFrete.SQL.Text :=
+        'INSERT INTO FRETESPEDIDOS (CODIGOFRETE, CODIGOPEDIDO, TIPOFRETE, VALORFRETE) VALUES '
+        + '(DEFAULT, :pCodigoPedido, :pTipoFrete, :pValorFrete)';
+      qrySalvarFrete.Params.ParamByName('pCodigoPedido').AsInteger :=
+        idPedidoGerado;
+      qrySalvarFrete.Params.ParamByName('pTipoFrete').AsString :=
+        cbTipo.Items[cbTipo.ItemIndex];
+      qrySalvarFrete.Params.ParamByName('pValorFrete').AsCurrency :=
+        StrToCurrDef(edtValorFrete.Text, 0);
+      qrySalvarFrete.ExecSQL;
+    finally
+      qrySalvarFrete.Free;
+    end;
+  end;
+
+  function retornaIdPedido: integer;
+  var
+    qryAux: TFDQuery;
+  begin
+    qryAux := TFDQuery.Create(nil);
+    try
+      qryAux.Connection := DM.Conn;
+      qryAux.SQL.Text :=
+        'SELECT FIRST 1 CODIGOPEDIDO FROM PEDIDOS ORDER BY CODIGOPEDIDO DESC';
+      qryAux.Open;
+
+      qryAux.First;
+      result := qryAux.FieldByName('CODIGOPEDIDO').AsInteger;
+    finally
+      qryAux.Free;
+    end;
+  end;
+
 begin
+  if Trim(cbCliente.Items[cbCliente.ItemIndex]) = '' then
+  begin
+    cbCliente.SetFocus;
+    raise Exception.Create('Necessário informar cliente!');
+  end;
+
+  if Trim(cbEndereco.Items[cbEndereco.ItemIndex]) = '' then
+  begin
+    cbEndereco.SetFocus;
+    raise Exception.Create('Necessário informar endereço!');
+  end;
+
+  if StrToCurrDef(edtValorTotalItens.Text, 0) <= 0 then
+  begin
+    raise Exception.Create('Não é possível finalizar venda com valor zerado!');
+  end;
+  DM.Conn.StartTransaction;
+  try
+    salvarPedido;
+    idPedidoGerado := retornaIdPedido;
+    if mtItens.RecordCount > 0 then
+    begin
+      salvarItensPedido(idPedidoGerado);
+    end;
+    salvarFretePedido(idPedidoGerado);
+  except
+    DM.Conn.Rollback;
+  end;
+
+  DM.Conn.Commit;
+
   ModalResult := mrOk;
 end;
 
@@ -162,6 +305,8 @@ begin
   finally
     qryAux.Free;
   end;
+
+  cbEnderecoSelect(nil);
 end;
 
 procedure TFrmEmitirPedido.cbEnderecoSelect(Sender: TObject);
@@ -203,13 +348,20 @@ begin
       qryAux.SQL.Clear;
 
       qryAux.SQL.Text :=
-        'SELECT VALORFRETE FROM FRETES WHERE TIPOFRETE = :pTipo';
+        'SELECT VALORFRETE FROM FRETES WHERE TIPOFRETE = :pTipo AND BAIRRO = ''''';
       qryAux.Params.ParamByName('pTipo').AsString :=
         cbTipo.Items[cbTipo.ItemIndex];
       qryAux.Open;
     end;
-
     qryAux.First;
+
+    if (qryAux.RecordCount = 0) then
+    begin
+      Exit;
+    end;
+
+    edtValorFrete.Text := FormatFloat('0.00#,##',
+      qryAux.FieldByName('VALORFRETE').AsCurrency);
 
   finally
     qryAux.Free;
@@ -224,6 +376,13 @@ begin
     StrToCurrDef(edtQtdeKg.Text, 0) * StrToCurrDef(edtValorPorKg.Text, 0));
 end;
 
+procedure TFrmEmitirPedido.edtValorTotalItensChange(Sender: TObject);
+begin
+  edtValorTotalPedido.Text := FormatFloat('#,##0.00',
+    (StrToCurrDef(edtValorTotalItens.Text, 0) +
+    StrToCurrDef(edtValorFrete.Text, 0)));
+end;
+
 procedure TFrmEmitirPedido.FormCreate(Sender: TObject);
 begin
   idPedido := 0;
@@ -236,6 +395,10 @@ begin
   edtCodigo.Text := IntToStr(idPedido);
   mtItens.Open;
   mtTempTable.Open;
+  dtPrevisaoEntrega.DateTime := Now;
+  dtEmissao.DateTime := Now;
+//  dtPrevisaoEntrega.Time := IncHour(dtPrevisaoEntrega.Time, -12);
+//  dtEmissao.Time := IncHour(dtEmissao.Time, -12);
   qryAux := TFDQuery.Create(nil);
   try
     qryAux.Connection := DM.Conn;

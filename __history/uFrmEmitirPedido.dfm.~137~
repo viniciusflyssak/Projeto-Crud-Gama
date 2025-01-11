@@ -153,7 +153,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 46
       Width = 336
       Height = 24
-      Hint = 'Selecione o status atual do cliente.'
+      Hint = 'Informe o endere'#231'o de entrega deste pedido.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -171,7 +171,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 46
       Width = 473
       Height = 24
-      Hint = 'Selecione o status atual do cliente.'
+      Hint = 'Informe o cliente do pedido.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -189,7 +189,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 103
       Width = 155
       Height = 24
-      Hint = 'Selecione o status atual do item.'
+      Hint = 'Selecione o status atual do pedido.'
       Style = csDropDownList
       Color = clSilver
       Enabled = False
@@ -230,8 +230,9 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 103
       Width = 186
       Height = 24
+      Hint = 'Informe a data de previs'#227'o de entrega do pedido.'
       Date = 45666.000000000000000000
-      Format = 'dd/mm/yyyy hh:mm'
+      Format = 'dd/mm/yyyy HH:mm'
       Time = 0.986722129629924900
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -239,6 +240,8 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
     end
     object dtEmissao: TDateTimePicker
@@ -246,6 +249,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Top = 103
       Width = 186
       Height = 24
+      Hint = 'Informe a data de emiss'#227'o do pedido'
       Date = 45666.000000000000000000
       Format = 'dd/mm/yyyy hh:mm'
       Time = 0.986722129629924900
@@ -255,6 +259,8 @@ object FrmEmitirPedido: TFrmEmitirPedido
       Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 6
     end
   end
@@ -654,9 +660,6 @@ object FrmEmitirPedido: TFrmEmitirPedido
     end
     object mtItensCODIGOITEMPEDIDO: TIntegerField
       FieldName = 'CODIGOITEMPEDIDO'
-    end
-    object mtItensITEMID: TIntegerField
-      FieldName = 'ITEMID'
     end
     object mtItensITEM: TStringField
       FieldName = 'ITEM'
