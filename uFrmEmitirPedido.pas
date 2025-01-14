@@ -9,7 +9,7 @@ uses
   Vcl.Grids, Vcl.DBGrids, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Buttons,
-  Vcl.ExtCtrls, FireDAC.DApt, uDM, Vcl.ComCtrls, DateUtils, frxClass;
+  Vcl.ExtCtrls, FireDAC.DApt, uDM, Vcl.ComCtrls, DateUtils, frxClass, frxDBSet;
 
 type
   TFrmEmitirPedido = class(TForm)
@@ -62,8 +62,10 @@ type
     IntegerField1: TIntegerField;
     IntegerField2: TIntegerField;
     StringField1: TStringField;
-    frxImpressaoItens: TfrxReport;
-    frxImpressaoQtdeKgs: TfrxReport;
+    dtsRel: TfrxDBDataset;
+    frxPedidoSemItens: TfrxReport;
+    frxPedidoComItens: TfrxReport;
+    memTableRel: TFDMemTable;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -83,6 +85,7 @@ type
   public
     { Public declarations }
     idPedido: integer;
+    procedure gerarRelatorio(idPedidoRelatorio: integer);
   end;
 
 var
@@ -121,7 +124,8 @@ var
       qrySalvarPedido.Params.ParamByName('pPrevisaoEntrega').AsDateTime :=
         dtPrevisaoEntrega.DateTime;
       qrySalvarPedido.Params.ParamByName('pValorTotalPedido').AsCurrency :=
-        StrToCurrDef(edtValorTotalPedido.Text, 0);
+        StrToCurrDef(StringReplace(edtValorTotalPedido.Text, '.', '',
+        [rfReplaceAll]), 0);
       qrySalvarPedido.ExecSQL;
     finally
       qrySalvarPedido.Free;
@@ -185,7 +189,8 @@ var
       qrySalvarFrete.Params.ParamByName('pTipoFrete').AsString :=
         cbTipo.Items[cbTipo.ItemIndex];
       qrySalvarFrete.Params.ParamByName('pValorFrete').AsCurrency :=
-        StrToCurrDef(edtValorFrete.Text, 0);
+        StrToCurrDef(StringReplace(edtValorFrete.Text, '.', '',
+        [rfReplaceAll]), 0);
       qrySalvarFrete.ExecSQL;
     finally
       qrySalvarFrete.Free;
@@ -211,6 +216,7 @@ var
   end;
 
 begin
+  idPedidoGerado := 0;
   if Trim(cbCliente.Items[cbCliente.ItemIndex]) = '' then
   begin
     cbCliente.SetFocus;
@@ -223,7 +229,8 @@ begin
     raise Exception.Create('Necessário informar endereço!');
   end;
 
-  if StrToCurrDef(edtValorTotalItens.Text, 0) <= 0 then
+  if StrToCurrDef(StringReplace(edtValorTotalItens.Text, '.', '', [rfReplaceAll]
+    ), 0) <= 0 then
   begin
     raise Exception.Create('Não é possível finalizar venda com valor zerado!');
   end;
@@ -235,7 +242,8 @@ begin
     begin
       salvarItensPedido(idPedidoGerado);
     end;
-    if StrToCurrDef(edtValorFrete.Text, 0) > 0 then
+    if StrToCurrDef(StringReplace(edtValorFrete.Text, '.', '', [rfReplaceAll]),
+      0) > 0 then
     begin
       salvarFretePedido(idPedidoGerado);
     end;
@@ -245,7 +253,120 @@ begin
 
   DM.Conn.Commit;
 
+  gerarRelatorio(idPedidoGerado);
+
   ModalResult := mrOk;
+end;
+
+procedure TFrmEmitirPedido.gerarRelatorio(idPedidoRelatorio: integer);
+var
+  qryAux: TFDQuery;
+  qryItens: TFDQuery;
+  frxPedido: TfrxReport;
+begin
+  qryAux := TFDQuery.Create(nil);
+  qryItens := TFDQuery.Create(nil);
+  try
+    qryAux.Connection := DM.Conn;
+    qryItens.Connection := DM.Conn;
+
+    qryItens.SQL.Text :=
+      'SELECT i2.DESCRICAO, i.QUANTIDADE, i.VALORUNITARIO, i.VALORTOTALITEM ' +
+      ' FROM ITENSPEDIDOS i LEFT JOIN ITENS i2 ON i2.CODIGO = i.ITEMID ' +
+      ' WHERE I.CODIGOPEDIDO = :pCodigoPedido';
+    qryItens.Params.ParamByName('pCodigoPedido').AsInteger := idPedidoRelatorio;
+    qryItens.Open;
+    qryItens.First;
+
+    if qryItens.RecordCount = 0 then
+    begin
+      frxPedido := frxPedidoSemItens;
+      frxPedido.Variables['valorKg'] :=
+        QuotedStr(FormatFloat('R$#,##0.00',
+        StrToCurrDef(StringReplace(edtValorPorKg.Text, '.', '',
+        [rfReplaceAll]), 0)));
+      frxPedido.Variables['quantidadeKg'] :=
+        QuotedStr(FormatFloat('#,###0.000',
+        StrToCurrDef(StringReplace(edtQtdeKg.Text, '.', '',
+        [rfReplaceAll]), 0)));
+    end
+    else
+    begin
+      memTableRel.CloneCursor(qryItens);
+      frxPedido := frxPedidoComItens;
+      dsItens.DataSet := memTableRel;
+    end;
+
+    qryAux.SQL.Add
+      ('SELECT p.EMISSAO, p.CODIGOPEDIDO, p.VALORTOTALPEDIDO, c.OBSERVACOES, c.NOME, c.TELEFONE, e.ENDERECO, e.BAIRRO, p.PREVISAOENTREGA, f.TIPOFRETE, f.VALORFRETE '
+      + ' FROM PEDIDOS p' + ' LEFT JOIN CLIENTES c ON c.CODIGO = p.CLIENTEID ' +
+      ' LEFT JOIN ENDERECOS e ON e.CODIGOENDERECO = p.ENDERECOENTREGAID' +
+      ' LEFT JOIN FRETESPEDIDOS f ON f.CODIGOPEDIDO = p.CODIGOPEDIDO ' +
+      ' WHERE P.CODIGOPEDIDO = :pCodigoPedido');
+    qryAux.Params.ParamByName('pCodigoPedido').AsInteger := idPedidoRelatorio;
+    qryAux.Open;
+    qryAux.First;
+
+    frxPedido.Variables['dtaEmissao'] :=
+      QuotedStr(FormatDateTime('dd/MM/yyyy HH:mm', qryAux.FieldByName('EMISSAO')
+      .AsDateTime));
+    frxPedido.Variables['codigoPedido'] :=
+      QuotedStr(qryAux.FieldByName('CODIGOPEDIDO').AsString);
+    frxPedido.Variables['totalPedido'] :=
+      QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('VALORTOTALPEDIDO')
+      .AsCurrency));
+    if Trim(qryAux.FieldByName('OBSERVACOES').AsString) = '' then
+    begin
+      frxPedido.Variables['observacaoCliente'] := QuotedStr('Nada consta');
+    end
+    else
+    begin
+      frxPedido.Variables['observacaoCliente'] :=
+        QuotedStr(qryAux.FieldByName('OBSERVACOES').AsString);
+    end;
+    frxPedido.Variables['nomeCliente'] :=
+      QuotedStr(qryAux.FieldByName('NOME').AsString);
+    frxPedido.Variables['telefoneCliente'] :=
+      QuotedStr(qryAux.FieldByName('TELEFONE').AsString);
+    frxPedido.Variables['enderecoCliente'] :=
+      QuotedStr(qryAux.FieldByName('ENDERECO').AsString);
+    frxPedido.Variables['bairroCliente'] :=
+      QuotedStr(qryAux.FieldByName('BAIRRO').AsString);
+    frxPedido.Variables['previsaoEntrega'] :=
+      QuotedStr(FormatDateTime('dd/MM/yyyy HH:mm',
+      qryAux.FieldByName('PREVISAOENTREGA').AsDateTime));
+    if (Trim(qryAux.FieldByName('TIPOFRETE').AsString) = '') then
+    begin
+      frxPedido.Variables['tipoFrete'] := QuotedStr('Nenhum');
+    end
+    else
+    begin
+      frxPedido.Variables['tipoFrete'] :=
+        QuotedStr(qryAux.FieldByName('TIPOFRETE').AsString);
+    end;
+    frxPedido.Variables['valorFrete'] :=
+      QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('VALORFRETE')
+      .AsCurrency));
+
+    if Trim(edtObservacoes.Text) = '' then
+    begin
+      frxPedido.Variables['observacaoPedido'] := QuotedStr('Nada consta');
+    end
+    else
+    begin
+      frxPedido.Variables['observacaoPedido'] := QuotedStr(edtObservacoes.Text);
+    end;
+    frxPedido.Variables['valorTotalItens'] :=
+      QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('VALORTOTALPEDIDO')
+      .AsCurrency - qryAux.FieldByName('VALORFRETE').AsCurrency));
+
+    frxPedido.PrepareReport(true);
+    frxPedido.ShowReport(true);
+  finally
+    qryAux.Free;
+    qryItens.Free;
+  end;
+
 end;
 
 procedure TFrmEmitirPedido.cbClienteSelect(Sender: TObject);
@@ -376,16 +497,20 @@ end;
 procedure TFrmEmitirPedido.edtQtdeKgChange(Sender: TObject);
 begin
   edtValorPorKg.Text := FormatFloat('#,##0.00',
-    StrToCurrDef(edtValorPorKg.Text, 0));
+    StrToCurrDef(StringReplace(edtValorPorKg.Text, '.', '',
+    [rfReplaceAll]), 0));
   edtValorTotalItens.Text := FormatFloat('#,##0.00',
-    StrToCurrDef(edtQtdeKg.Text, 0) * StrToCurrDef(edtValorPorKg.Text, 0));
+    StrToCurrDef(StringReplace(edtQtdeKg.Text, '.', '', [rfReplaceAll]), 0) *
+    StrToCurrDef(StringReplace(edtValorPorKg.Text, '.', '',
+    [rfReplaceAll]), 0));
 end;
 
 procedure TFrmEmitirPedido.edtValorTotalItensChange(Sender: TObject);
 begin
   edtValorTotalPedido.Text := FormatFloat('#,##0.00',
-    (StrToCurrDef(edtValorTotalItens.Text, 0) +
-    StrToCurrDef(edtValorFrete.Text, 0)));
+    (StrToCurrDef(StringReplace(edtValorTotalItens.Text, '.', '',
+    [rfReplaceAll]), 0) + StrToCurrDef(StringReplace(edtValorFrete.Text, '.',
+    '', [rfReplaceAll]), 0)));
 end;
 
 procedure TFrmEmitirPedido.FormCreate(Sender: TObject);
