@@ -29,8 +29,8 @@
     <Transaction>2025/01/13 22:16:23.000.110,=E:\Projetos\projetoGama\Unit1.pas</Transaction>
     <Transaction>2025/01/13 22:16:53.000.534,E:\Projetos\projetoGama\Unit1.pas=E:\Projetos\projetoGama\uFrmGerenciamentoPedidos.pas</Transaction>
     <Transaction>2025/01/13 22:16:53.000.534,E:\Projetos\projetoGama\Unit1.dfm=E:\Projetos\projetoGama\uFrmGerenciamentoPedidos.dfm</Transaction>
-    <Transaction>2025/01/13 23:12:53.604,=E:\Projetos\projetoGama\Unit1.pas</Transaction>
-    <Transaction>2025/01/13 23:13:12.926,E:\Projetos\projetoGama\uFrmRelatorioPedidos.dfm=E:\Projetos\projetoGama\Unit1.dfm</Transaction>
-    <Transaction>2025/01/13 23:13:12.926,E:\Projetos\projetoGama\uFrmRelatorioPedidos.pas=E:\Projetos\projetoGama\Unit1.pas</Transaction>
+    <Transaction>2025/01/13 23:12:53.000.604,=E:\Projetos\projetoGama\Unit1.pas</Transaction>
+    <Transaction>2025/01/13 23:13:12.000.926,E:\Projetos\projetoGama\uFrmRelatorioPedidos.dfm=E:\Projetos\projetoGama\Unit1.dfm</Transaction>
+    <Transaction>2025/01/13 23:13:12.000.926,E:\Projetos\projetoGama\uFrmRelatorioPedidos.pas=E:\Projetos\projetoGama\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>

@@ -170,7 +170,7 @@ object FrmRelatorioPedidos: TFrmRelatorioPedidos
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
+      TabOrder = 3
     end
     object dtEmissaoInicial: TDateTimePicker
       Left = 8
@@ -197,7 +197,7 @@ object FrmRelatorioPedidos: TFrmRelatorioPedidos
       Top = 45
       Width = 186
       Height = 24
-      Hint = 'Informe a data de emiss'#227'o do pedido'
+      Hint = 'Informe a data de emiss'#227'o do pedido.'
       Date = 45666.000000000000000000
       Format = 'dd/MM/yyyy HH:mm'
       Time = 0.986722129629924900
@@ -210,7 +210,7 @@ object FrmRelatorioPedidos: TFrmRelatorioPedidos
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 3
+      TabOrder = 1
     end
     object dtEntregaFinal: TDateTimePicker
       Left = 232
@@ -238,7 +238,7 @@ object FrmRelatorioPedidos: TFrmRelatorioPedidos
       Top = 149
       Width = 155
       Height = 24
-      Hint = 'Selecione o status atual do pedido.'
+      Hint = 'Selecione o cliente do pedido.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -249,7 +249,7 @@ object FrmRelatorioPedidos: TFrmRelatorioPedidos
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 5
+      TabOrder = 6
       Text = 'Todos'
       Items.Strings = (
         'Todos'
@@ -262,7 +262,7 @@ object FrmRelatorioPedidos: TFrmRelatorioPedidos
       Top = 149
       Width = 155
       Height = 24
-      Hint = 'Selecione o status atual do pedido.'
+      Hint = 'Selecione o cliente do pedido.'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -273,7 +273,7 @@ object FrmRelatorioPedidos: TFrmRelatorioPedidos
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 6
+      TabOrder = 7
       Text = 'Todos'
       Items.Strings = (
         'Todos'
@@ -293,7 +293,7 @@ object FrmRelatorioPedidos: TFrmRelatorioPedidos
       Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 5
       OnClick = chkDataEntregaClick
     end
   end
