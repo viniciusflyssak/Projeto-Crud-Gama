@@ -253,7 +253,7 @@ begin
 
   gerarRelatorio(idPedidoGerado);
 
-  ModalResult := mrOk;
+  FormShow(Sender);
 end;
 
 procedure TFrmEmitirPedido.gerarRelatorio(idPedidoRelatorio: integer);
@@ -292,7 +292,6 @@ begin
     begin
       memTableRel.CloneCursor(qryItens);
       frxPedido := frxPedidoComItens;
-      dsItens.DataSet := memTableRel;
     end;
 
     qryAux.SQL.Add
@@ -358,11 +357,17 @@ begin
       QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('VALORTOTALPEDIDO')
       .AsCurrency - qryAux.FieldByName('VALORFRETE').AsCurrency));
 
-    if (frxPedido.Variables['quantidadeKg'] = 0) then
+    if (StrToCurrDef(StringReplace(edtQtdeKg.Text, '.', '', [rfReplaceAll]), 0)
+      = 0) and (qryItens.RecordCount = 0) then
     begin
-      frxPedido.Variables['quantidadeKg']
-        := ((qryAux.FieldByName('VALORTOTALPEDIDO').AsCurrency) -
-                (qryAux.FieldByName('VALORFRETE').AsCurrency)) /  qryAux.FieldByName('PRECOPORKG').AsCurrency
+      frxPedido.Variables['quantidadeKg'] :=
+        QuotedStr(FormatFloat('#,###0.000',
+        ((qryAux.FieldByName('VALORTOTALPEDIDO').AsCurrency) -
+        (qryAux.FieldByName('VALORFRETE').AsCurrency)) /
+        qryAux.FieldByName('PRECOPORKG').AsCurrency));
+      frxPedido.Variables['valorKg'] :=
+        QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('PRECOPORKG')
+        .AsCurrency));
 
     end;
 
@@ -526,6 +531,8 @@ begin
   edtCodigo.Text := '0';
   mtItens.Open;
   mtTempTable.Open;
+  mtItens.EmptyDataSet;
+  mtTempTable.EmptyDataSet;
   dtPrevisaoEntrega.DateTime := Now;
   dtEmissao.DateTime := Now;
   qryAux := TFDQuery.Create(nil);

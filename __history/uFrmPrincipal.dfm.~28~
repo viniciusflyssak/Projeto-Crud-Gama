@@ -34,6 +34,18 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Configura'#231#245'es'
       object Configuraesdefret1: TMenuItem
         Caption = 'Configura'#231#227'o de frete'
+        OnClick = Configuraesdefret1Click
+      end
+    end
+    object Processos1: TMenuItem
+      Caption = 'Processos'
+      object EmissodePedido1: TMenuItem
+        Caption = 'Emiss'#227'o de Pedido'
+        OnClick = EmissodePedido1Click
+      end
+      object Gerenciamentodepedidos1: TMenuItem
+        Caption = 'Gerenciamento de pedidos'
+        OnClick = Gerenciamentodepedidos1Click
       end
     end
   end

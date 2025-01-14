@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, uDM,
   uFrmGerenciamentoClientes, uFrmGerenciamentoItens, uFrmConfiguracaoFrete,
-  uFrmEmitirPedido, uFrmGerenciamentoPedidos;
+  uFrmEmitirPedido, uFrmGerenciamentoPedidos, uFrmRelatorioPedidos;
 
 type
   TfrmPrincipal = class(TForm)
@@ -20,12 +20,15 @@ type
     Processos1: TMenuItem;
     EmissodePedido1: TMenuItem;
     Gerenciamentodepedidos1: TMenuItem;
+    Relatrios1: TMenuItem;
+    Reimprimir1: TMenuItem;
     procedure Clientes1Click(Sender: TObject);
     procedure Itens1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Configuraesdefret1Click(Sender: TObject);
     procedure EmissodePedido1Click(Sender: TObject);
     procedure Gerenciamentodepedidos1Click(Sender: TObject);
+    procedure Reimprimir1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -101,6 +104,18 @@ begin
     FrmGerenciamentoItens.ShowModal;
   finally
     FrmGerenciamentoItens.Free;
+  end;
+end;
+
+procedure TfrmPrincipal.Reimprimir1Click(Sender: TObject);
+var
+  FrmRelatorioPedido: TFrmRelatorioPedidos;
+begin
+  FrmRelatorioPedido := TFrmRelatorioPedidos.Create(nil);
+  try
+    FrmRelatorioPedido.ShowModal;
+  finally
+    FrmRelatorioPedido.Free;
   end;
 end;
 

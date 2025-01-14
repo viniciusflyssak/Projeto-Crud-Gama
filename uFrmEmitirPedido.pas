@@ -253,7 +253,7 @@ begin
 
   gerarRelatorio(idPedidoGerado);
 
-  ModalResult := mrOk;
+  FormShow(Sender);
 end;
 
 procedure TFrmEmitirPedido.gerarRelatorio(idPedidoRelatorio: integer);
@@ -292,7 +292,6 @@ begin
     begin
       memTableRel.CloneCursor(qryItens);
       frxPedido := frxPedidoComItens;
-      dsItens.DataSet := memTableRel;
     end;
 
     qryAux.SQL.Add
@@ -358,10 +357,11 @@ begin
       QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('VALORTOTALPEDIDO')
       .AsCurrency - qryAux.FieldByName('VALORFRETE').AsCurrency));
 
-    if (StrToCurrDef(StringReplace(edtQtdeKg.Text, '.', '',
-        [rfReplaceAll]), 0) = 0) and (qryItens.RecordCount = 0) then
+    if (StrToCurrDef(StringReplace(edtQtdeKg.Text, '.', '', [rfReplaceAll]), 0)
+      = 0) and (qryItens.RecordCount = 0) then
     begin
-      frxPedido.Variables['quantidadeKg'] :=  QuotedStr(FormatFloat('#,###0.000',
+      frxPedido.Variables['quantidadeKg'] :=
+        QuotedStr(FormatFloat('#,###0.000',
         ((qryAux.FieldByName('VALORTOTALPEDIDO').AsCurrency) -
         (qryAux.FieldByName('VALORFRETE').AsCurrency)) /
         qryAux.FieldByName('PRECOPORKG').AsCurrency));
@@ -369,183 +369,301 @@ begin
         QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('PRECOPORKG')
         .AsCurrency));
 
-      end;
+    end;
 
-      frxPedido.PrepareReport(true); frxPedido.ShowReport(true);
-      finally qryAux.Free; qryItens.Free; end;
+    frxPedido.PrepareReport(true);
+    frxPedido.ShowReport(true);
+  finally
+    qryAux.Free;
+    qryItens.Free;
+  end;
 
-      end;
+end;
 
-      procedure TFrmEmitirPedido.cbClienteSelect(Sender: TObject);
-      var qryAux: TFDQuery; begin qryAux := TFDQuery.Create(nil);
-      try qryAux.Connection := DM.Conn;
-      qryAux.SQL.Text :=
-        'SELECT CODIGOENDERECO, ENDERECO, BAIRRO  FROM ENDERECOS WHERE CODIGOCLIENTE = :pCodigoCliente';
-      qryAux.Params.ParamByName('pCodigoCliente').AsInteger :=
-        retornaCodigo(cbCliente); qryAux.Open;
+procedure TFrmEmitirPedido.cbClienteSelect(Sender: TObject);
+var
+  qryAux: TFDQuery;
+begin
+  qryAux := TFDQuery.Create(nil);
+  try
+    qryAux.Connection := DM.Conn;
+    qryAux.SQL.Text :=
+      'SELECT CODIGOENDERECO, ENDERECO, BAIRRO  FROM ENDERECOS WHERE CODIGOCLIENTE = :pCodigoCliente';
+    qryAux.Params.ParamByName('pCodigoCliente').AsInteger :=
+      retornaCodigo(cbCliente);
+    qryAux.Open;
 
-      qryAux.First; cbEndereco.Items.Clear;
-      while not(qryAux.Eof) do begin cbEndereco.Items.Add(qryAux.FieldByName
-        ('CODIGOENDERECO').AsString + ' - ' + qryAux.FieldByName('ENDERECO')
-        .AsString + ' | ' + qryAux.FieldByName('BAIRRO').AsString);
-      qryAux.Next; end;
+    qryAux.First;
+    cbEndereco.Items.Clear;
+    while not(qryAux.Eof) do
+    begin
+      cbEndereco.Items.Add(qryAux.FieldByName('CODIGOENDERECO').AsString + ' - '
+        + qryAux.FieldByName('ENDERECO').AsString + ' | ' +
+        qryAux.FieldByName('BAIRRO').AsString);
+      qryAux.Next;
+    end;
 
-      qryAux.Close; qryAux.SQL.Clear;
-      qryAux.SQL.Text :=
-        'SELECT PRECOPORKG FROM CLIENTES WHERE CODIGO = :pCodigo';
-      qryAux.Params.ParamByName('pCodigo').AsInteger :=
-        retornaCodigo(cbCliente); qryAux.Open; qryAux.First;
-      if qryAux.FieldByName('PRECOPORKG').AsCurrency > 0
-      then begin mtItens.EmptyDataSet; grdItens.Enabled := false;
-      edtQtdeKg.Enabled := true; edtValorPorKg.Enabled := true;
+    qryAux.Close;
+    qryAux.SQL.Clear;
+    qryAux.SQL.Text :=
+      'SELECT PRECOPORKG FROM CLIENTES WHERE CODIGO = :pCodigo';
+    qryAux.Params.ParamByName('pCodigo').AsInteger := retornaCodigo(cbCliente);
+    qryAux.Open;
+    qryAux.First;
+    if qryAux.FieldByName('PRECOPORKG').AsCurrency > 0 then
+    begin
+      mtItens.EmptyDataSet;
+      grdItens.Enabled := false;
+      edtQtdeKg.Enabled := true;
+      edtValorPorKg.Enabled := true;
 
-      grdItens.TitleFont.Color := clWindowFrame; edtQtdeKg.Color := clWindow;
+      grdItens.TitleFont.Color := clWindowFrame;
+      edtQtdeKg.Color := clWindow;
       edtValorPorKg.Color := clWindow;
 
       edtValorPorKg.Text := qryAux.FieldByName('PRECOPORKG').AsString;
-      edtQtdeKg.Text := '1'; end else begin edtQtdeKg.Text := '';
+      edtQtdeKg.Text := '1';
+    end
+    else
+    begin
+      edtQtdeKg.Text := '';
       edtValorPorKg.Text := '';
 
-      grdItens.Enabled := true; edtQtdeKg.Enabled := false;
+      grdItens.Enabled := true;
+      edtQtdeKg.Enabled := false;
       edtValorPorKg.Enabled := false;
 
-      grdItens.TitleFont.Color := clWindowText; edtQtdeKg.Color := clSilver;
-      edtValorPorKg.Color := clSilver; end;
+      grdItens.TitleFont.Color := clWindowText;
+      edtQtdeKg.Color := clSilver;
+      edtValorPorKg.Color := clSilver;
+    end;
 
-      cbEndereco.ItemIndex := 0; finally qryAux.Free; end;
+    cbEndereco.ItemIndex := 0;
+  finally
+    qryAux.Free;
+  end;
 
-      cbEnderecoSelect(nil); end;
+  cbEnderecoSelect(nil);
+end;
 
-      procedure TFrmEmitirPedido.cbEnderecoSelect(Sender: TObject);
-      var qryAux: TFDQuery; bairro: string; begin bairro := '';
-      if cbTipo.ItemIndex = 0 then begin Exit; end;
+procedure TFrmEmitirPedido.cbEnderecoSelect(Sender: TObject);
+var
+  qryAux: TFDQuery;
+  bairro: string;
+begin
+  bairro := '';
+  if cbTipo.ItemIndex = 0 then
+  begin
+    Exit;
+  end;
 
-      qryAux := TFDQuery.Create(nil); try qryAux.Connection := DM.Conn;
-      qryAux.SQL.Text :=
-        'SELECT BAIRRO FROM ENDERECOS WHERE CODIGOENDERECO = :pCodigo';
-      qryAux.Params.ParamByName('pCodigo').AsInteger :=
-        retornaCodigo(cbEndereco); qryAux.Open;
+  qryAux := TFDQuery.Create(nil);
+  try
+    qryAux.Connection := DM.Conn;
+    qryAux.SQL.Text :=
+      'SELECT BAIRRO FROM ENDERECOS WHERE CODIGOENDERECO = :pCodigo';
+    qryAux.Params.ParamByName('pCodigo').AsInteger := retornaCodigo(cbEndereco);
+    qryAux.Open;
 
-      qryAux.First;
+    qryAux.First;
 
-      bairro := qryAux.FieldByName('BAIRRO').AsString;
+    bairro := qryAux.FieldByName('BAIRRO').AsString;
 
-      qryAux.Close; qryAux.SQL.Clear;
+    qryAux.Close;
+    qryAux.SQL.Clear;
 
-      qryAux.SQL.Text :=
-        'SELECT VALORFRETE FROM FRETES WHERE TIPOFRETE = :pTipo AND BAIRRO = :pBairro';
-      qryAux.Params.ParamByName('pTipo').AsString :=
-        cbTipo.Items[cbTipo.ItemIndex];
-      qryAux.Params.ParamByName('pBairro').AsString := bairro; qryAux.Open;
+    qryAux.SQL.Text :=
+      'SELECT VALORFRETE FROM FRETES WHERE TIPOFRETE = :pTipo AND BAIRRO = :pBairro';
+    qryAux.Params.ParamByName('pTipo').AsString :=
+      cbTipo.Items[cbTipo.ItemIndex];
+    qryAux.Params.ParamByName('pBairro').AsString := bairro;
+    qryAux.Open;
 
-      if qryAux.RecordCount = 0 then begin qryAux.Close; qryAux.SQL.Clear;
+    if qryAux.RecordCount = 0 then
+    begin
+      qryAux.Close;
+      qryAux.SQL.Clear;
 
       qryAux.SQL.Text :=
         'SELECT VALORFRETE FROM FRETES WHERE TIPOFRETE = :pTipo AND BAIRRO = ''''';
       qryAux.Params.ParamByName('pTipo').AsString :=
-        cbTipo.Items[cbTipo.ItemIndex]; qryAux.Open; end; qryAux.First;
-
-      if (qryAux.RecordCount = 0) then begin Exit; end;
-
-      edtValorFrete.Text := FormatFloat('0.00#,##',
-        qryAux.FieldByName('VALORFRETE').AsCurrency);
-
-      finally qryAux.Free; end; end;
-
-      procedure TFrmEmitirPedido.edtQtdeKgChange(Sender: TObject);
-      begin edtValorPorKg.Text := FormatFloat('#,##0.00',
-        StrToCurrDef(StringReplace(edtValorPorKg.Text, '.', '', [rfReplaceAll]),
-        0)); edtValorTotalItens.Text := FormatFloat('#,##0.00',
-        StrToCurrDef(StringReplace(edtQtdeKg.Text, '.', '', [rfReplaceAll]),
-        0) * StrToCurrDef(StringReplace(edtValorPorKg.Text, '.', '',
-        [rfReplaceAll]), 0)); end;
-
-      procedure TFrmEmitirPedido.edtValorTotalItensChange(Sender: TObject);
-      begin edtValorTotalPedido.Text := FormatFloat('#,##0.00',
-        (StrToCurrDef(StringReplace(edtValorTotalItens.Text, '.', '',
-        [rfReplaceAll]), 0) + StrToCurrDef(StringReplace(edtValorFrete.Text,
-        '.', '', [rfReplaceAll]), 0))); end;
-
-      procedure TFrmEmitirPedido.FormShow(Sender: TObject);
-      var qryAux: TFDQuery; begin edtCodigo.Text := '0'; mtItens.Open;
-      mtTempTable.Open; dtPrevisaoEntrega.DateTime := Now;
-      dtEmissao.DateTime := Now; qryAux := TFDQuery.Create(nil);
-      try qryAux.Connection := DM.Conn;
-      qryAux.SQL.Text :=
-        'SELECT CODIGO, NOME FROM CLIENTES WHERE STATUS = ''Ativo''';
-      qryAux.Open; qryAux.First;
-
-      if qryAux.RecordCount = 0 then begin raise Exception.Create
-        ('Cadastre ao menos uma entidade!'); ModalResult := mrCancel; end;
-
-      cbCliente.Items.Clear;
-      while not(qryAux.Eof) do begin cbCliente.Items.Add(qryAux.FieldByName
-        ('CODIGO').AsString + ' - ' + qryAux.FieldByName('NOME').AsString);
-      qryAux.Next; end;
-
-      cbCliente.ItemIndex := 0; cbClienteSelect(Sender);
-
-      qryAux.Close; qryAux.SQL.Clear;
-
-      qryAux.SQL.Text :=
-        'SELECT CODIGO, DESCRICAO FROM ITENS WHERE STATUS = ''Ativo''';
+        cbTipo.Items[cbTipo.ItemIndex];
       qryAux.Open;
+    end;
+    qryAux.First;
 
-      if qryAux.RecordCount = 0 then begin raise Exception.Create
-        ('Cadastre ao menos um item!'); ModalResult := mrCancel; end;
+    if (qryAux.RecordCount = 0) then
+    begin
+      Exit;
+    end;
 
-      qryAux.First;
+    edtValorFrete.Text := FormatFloat('0.00#,##',
+      qryAux.FieldByName('VALORFRETE').AsCurrency);
 
-      grdItens.Columns[0].PickList.Clear;
-      while not(qryAux.Eof) do begin grdItens.Columns[0].PickList.Add
-        (qryAux.FieldByName('CODIGO').AsString + ' - ' +
-        qryAux.FieldByName('DESCRICAO').AsString); qryAux.Next; end;
+  finally
+    qryAux.Free;
+  end;
+end;
 
-      finally qryAux.Free; end;
+procedure TFrmEmitirPedido.edtQtdeKgChange(Sender: TObject);
+begin
+  edtValorPorKg.Text := FormatFloat('#,##0.00',
+    StrToCurrDef(StringReplace(edtValorPorKg.Text, '.', '',
+    [rfReplaceAll]), 0));
+  edtValorTotalItens.Text := FormatFloat('#,##0.00',
+    StrToCurrDef(StringReplace(edtQtdeKg.Text, '.', '', [rfReplaceAll]), 0) *
+    StrToCurrDef(StringReplace(edtValorPorKg.Text, '.', '',
+    [rfReplaceAll]), 0));
+end;
 
-      end;
+procedure TFrmEmitirPedido.edtValorTotalItensChange(Sender: TObject);
+begin
+  edtValorTotalPedido.Text := FormatFloat('#,##0.00',
+    (StrToCurrDef(StringReplace(edtValorTotalItens.Text, '.', '',
+    [rfReplaceAll]), 0) + StrToCurrDef(StringReplace(edtValorFrete.Text, '.',
+    '', [rfReplaceAll]), 0)));
+end;
 
-      procedure TFrmEmitirPedido.grdItensKeyDown(Sender: TObject; var Key: Word;
-        Shift: TShiftState); begin if (Key = 46) then begin mtItens.Edit;
-      mtItens.FieldByName('DELETAR').AsBoolean := true; mtItens.Post;
+procedure TFrmEmitirPedido.FormShow(Sender: TObject);
+var
+  qryAux: TFDQuery;
+begin
+  edtCodigo.Text := '0';
+  mtItens.Open;
+  mtTempTable.Open;
+  mtItens.EmptyDataSet;
+  mtTempTable.EmptyDataSet;
+  dtPrevisaoEntrega.DateTime := Now;
+  dtEmissao.DateTime := Now;
+  edtValorFrete.Text := '';
+  cbTipo.ItemIndex := 0;
 
-      mtItens.Filtered := false; mtItens.Filter := 'DELETAR = 0';
-      mtItens.Filtered := true; end; end;
+  qryAux := TFDQuery.Create(nil);
+  try
+    qryAux.Connection := DM.Conn;
+    qryAux.SQL.Text :=
+      'SELECT CODIGO, NOME FROM CLIENTES WHERE STATUS = ''Ativo''';
+    qryAux.Open;
+    qryAux.First;
 
-      procedure TFrmEmitirPedido.grdItensKeyPress(Sender: TObject;
-        var Key: Char); begin if grdItens.SelectedField = mtItensITEM
-      then Key := #0;
+    if qryAux.RecordCount = 0 then
+    begin
+      raise Exception.Create('Cadastre ao menos uma entidade!');
+      ModalResult := mrCancel;
+    end;
 
-      if (grdItens.SelectedField = mtItensQUANTIDADE) or
-        (grdItens.SelectedField = mtItensVALORUNITARIO)
-      then begin if not(CharInSet(Key, ['0' .. '9', ',', '.', #8])) then Key :=
-        #0; end; end;
+    cbCliente.Items.Clear;
+    while not(qryAux.Eof) do
+    begin
+      cbCliente.Items.Add(qryAux.FieldByName('CODIGO').AsString + ' - ' +
+        qryAux.FieldByName('NOME').AsString);
+      qryAux.Next;
+    end;
 
-      procedure TFrmEmitirPedido.mtItensITEMChange(Sender: TField);
-      var qryAux: TFDQuery; begin qryAux := TFDQuery.Create(nil);
-      try qryAux.Connection := DM.Conn;
-      qryAux.SQL.Text := 'SELECT PRECO FROM ITENS WHERE CODIGO = :pCodigo';
-      qryAux.Params.ParamByName('pCodigo').AsInteger :=
-        StrToIntDef(Copy(Sender.Value, 1, Pos(' -', Sender.Value) - 1), 0);
-      qryAux.Open; qryAux.First;
+    cbCliente.ItemIndex := 0;
+    cbClienteSelect(Sender);
 
-      mtItensVALORUNITARIO.Value := qryAux.FieldByName('PRECO').AsCurrency;
-      mtItensQUANTIDADE.Value := 1;
-      mtItensVALORTOTALITEM.Value := qryAux.FieldByName('PRECO').AsCurrency;
-      finally qryAux.Free; end; end;
+    qryAux.Close;
+    qryAux.SQL.Clear;
 
-      procedure TFrmEmitirPedido.mtItensQUANTIDADEChange(Sender: TField);
-      var total: Currency; begin total := 0;
-      mtItensVALORTOTALITEM.Value := mtItensVALORUNITARIO.Value *
-        mtItensQUANTIDADE.Value; mtTempTable := mtItens; mtTempTable.First;
+    qryAux.SQL.Text :=
+      'SELECT CODIGO, DESCRICAO FROM ITENS WHERE STATUS = ''Ativo''';
+    qryAux.Open;
 
-      while not(mtTempTable.Eof) do begin total := total +
-        mtTempTable.FieldByName('VALORTOTALITEM').AsCurrency; mtTempTable.Next;
-      end; edtValorTotalItens.Text := FormatFloat('#,##0.00', total);
-      mtItens.Edit; end;
+    if qryAux.RecordCount = 0 then
+    begin
+      raise Exception.Create('Cadastre ao menos um item!');
+      ModalResult := mrCancel;
+    end;
 
-      function TFrmEmitirPedido.retornaCodigo(Sender: TComboBox): integer;
-      begin result := StrToIntDef(Copy(Sender.Items[Sender.ItemIndex], 1,
-        Pos(' -', Sender.Items[Sender.ItemIndex]) - 1), 0); end;
+    qryAux.First;
 
-      end.
+    grdItens.Columns[0].PickList.Clear;
+    while not(qryAux.Eof) do
+    begin
+      grdItens.Columns[0].PickList.Add(qryAux.FieldByName('CODIGO').AsString +
+        ' - ' + qryAux.FieldByName('DESCRICAO').AsString);
+      qryAux.Next;
+    end;
+
+  finally
+    qryAux.Free;
+  end;
+
+end;
+
+procedure TFrmEmitirPedido.grdItensKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = 46) then
+  begin
+    mtItens.Edit;
+    mtItens.FieldByName('DELETAR').AsBoolean := true;
+    mtItens.Post;
+
+    mtItens.Filtered := false;
+    mtItens.Filter := 'DELETAR = 0';
+    mtItens.Filtered := true;
+  end;
+end;
+
+procedure TFrmEmitirPedido.grdItensKeyPress(Sender: TObject; var Key: Char);
+begin
+  if grdItens.SelectedField = mtItensITEM then
+    Key := #0;
+
+  if (grdItens.SelectedField = mtItensQUANTIDADE) or
+    (grdItens.SelectedField = mtItensVALORUNITARIO) then
+  begin
+    if not(CharInSet(Key, ['0' .. '9', ',', '.', #8])) then
+      Key := #0;
+  end;
+end;
+
+procedure TFrmEmitirPedido.mtItensITEMChange(Sender: TField);
+var
+  qryAux: TFDQuery;
+begin
+  qryAux := TFDQuery.Create(nil);
+  try
+    qryAux.Connection := DM.Conn;
+    qryAux.SQL.Text := 'SELECT PRECO FROM ITENS WHERE CODIGO = :pCodigo';
+    qryAux.Params.ParamByName('pCodigo').AsInteger :=
+      StrToIntDef(Copy(Sender.Value, 1, Pos(' -', Sender.Value) - 1), 0);
+    qryAux.Open;
+    qryAux.First;
+
+    mtItensVALORUNITARIO.Value := qryAux.FieldByName('PRECO').AsCurrency;
+    mtItensQUANTIDADE.Value := 1;
+    mtItensVALORTOTALITEM.Value := qryAux.FieldByName('PRECO').AsCurrency;
+  finally
+    qryAux.Free;
+  end;
+end;
+
+procedure TFrmEmitirPedido.mtItensQUANTIDADEChange(Sender: TField);
+var
+  total: Currency;
+begin
+  total := 0;
+  mtItensVALORTOTALITEM.Value := mtItensVALORUNITARIO.Value *
+    mtItensQUANTIDADE.Value;
+  mtTempTable := mtItens;
+  mtTempTable.First;
+
+  while not(mtTempTable.Eof) do
+  begin
+    total := total + mtTempTable.FieldByName('VALORTOTALITEM').AsCurrency;
+    mtTempTable.Next;
+  end;
+  edtValorTotalItens.Text := FormatFloat('#,##0.00', total);
+  mtItens.Edit;
+end;
+
+function TFrmEmitirPedido.retornaCodigo(Sender: TComboBox): integer;
+begin
+  result := StrToIntDef(Copy(Sender.Items[Sender.ItemIndex], 1,
+    Pos(' -', Sender.Items[Sender.ItemIndex]) - 1), 0);
+end;
+
+end.

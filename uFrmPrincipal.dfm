@@ -48,5 +48,12 @@ object frmPrincipal: TfrmPrincipal
         OnClick = Gerenciamentodepedidos1Click
       end
     end
+    object Relatrios1: TMenuItem
+      Caption = 'Relat'#243'rios'
+      object Reimprimir1: TMenuItem
+        Caption = 'Reimprimir'
+        OnClick = Reimprimir1Click
+      end
+    end
   end
 end

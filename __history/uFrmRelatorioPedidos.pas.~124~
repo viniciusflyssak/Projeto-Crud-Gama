@@ -1,0 +1,305 @@
+unit uFrmRelatorioPedidos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.ExtCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Comp.DataSet, FireDAC.Comp.Client, FireDAC.DApt,
+  uDM, Data.DB, frxClass, frxDBSet;
+
+type
+  TFrmRelatorioPedidos = class(TForm)
+    gbFiltros: TGroupBox;
+    lblEmissao: TLabel;
+    lblEntrega: TLabel;
+    lblStatus: TLabel;
+    lblAteEmissao: TLabel;
+    Label1: TLabel;
+    cbStatus: TComboBox;
+    dtEntregaInicial: TDateTimePicker;
+    dtEmissaoInicial: TDateTimePicker;
+    dtEmissaoFinal: TDateTimePicker;
+    dtEntregaFinal: TDateTimePicker;
+    cbClienteInicial: TComboBox;
+    lblClienteInicial: TLabel;
+    cbClienteFinal: TComboBox;
+    lblClienteFinal: TLabel;
+    pnlBotoes: TPanel;
+    btnGerar: TSpeedButton;
+    btnFechar: TSpeedButton;
+    chkDataEntrega: TCheckBox;
+    frxPedido: TfrxReport;
+    dtsRel: TfrxDBDataset;
+    memTableRel: TFDMemTable;
+    memTableRelDESCRICAO: TStringField;
+    memTableRelQUANTIDADE: TFloatField;
+    memTableRelVALORUNITARIO: TCurrencyField;
+    memTableRelVALORTOTALITEM: TCurrencyField;
+    procedure btnFecharClick(Sender: TObject);
+    procedure chkDataEntregaClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnGerarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmRelatorioPedidos: TFrmRelatorioPedidos;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmRelatorioPedidos.btnFecharClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
+end;
+
+procedure TFrmRelatorioPedidos.btnGerarClick(Sender: TObject);
+var
+  qryPedidos: TFDQuery;
+  qryAux: TFDQuery;
+  qryItens: TFDQuery;
+  function retornaCodigo(Sender: TComboBox): integer;
+  begin
+    result := StrToIntDef(Copy(Sender.Items[Sender.ItemIndex], 1,
+      Pos(' -', Sender.Items[Sender.ItemIndex]) - 1), 0);
+  end;
+
+begin
+  qryAux := TFDQuery.Create(nil);
+  qryItens := TFDQuery.Create(nil);
+  qryPedidos := TFDQuery.Create(nil);
+  try
+    qryAux.Connection := DM.Conn;
+    qryItens.Connection := DM.Conn;
+    qryPedidos.Connection := DM.Conn;
+
+    qryPedidos.SQL.Add
+      ('SELECT CODIGOPEDIDO FROM PEDIDOS WHERE EMISSAO BETWEEN :pEmissaoInicial AND :pEmissaoFinal ');
+    qryPedidos.Params.ParamByName('pEmissaoInicial').AsDateTime :=
+      dtEmissaoInicial.DateTime;
+    qryPedidos.Params.ParamByName('pEmissaoFinal').AsDateTime :=
+      dtEmissaoFinal.DateTime;
+    if (chkDataEntrega.Checked) then
+    begin
+      qryPedidos.SQL.Add
+        (' AND PREVISAOENTREGA BETWEEN :pPrevisaoInicial AND :pPrevisaoFinal ');
+      qryPedidos.Params.ParamByName('pPrevisaoInicial').AsDateTime :=
+        dtEntregaInicial.DateTime;
+      qryPedidos.Params.ParamByName('pPrevisaoFinal').AsDateTime :=
+        dtEntregaFinal.DateTime;
+    end;
+
+    if cbStatus.ItemIndex > 0 then
+    begin
+      qryPedidos.SQL.Add(' AND STATUS = :pStatus ');
+      qryPedidos.Params.ParamByName('pStatus').AsString :=
+        cbStatus.Items[cbStatus.ItemIndex];
+    end;
+
+    if (cbClienteInicial.ItemIndex > 0) and (cbClienteFinal.ItemIndex > 0) then
+    begin
+      qryPedidos.SQL.Add
+        (' AND CLIENTEID BETWEEN :pClienteInicial AND :pClienteFinal');
+      qryPedidos.Params.ParamByName('pClienteInicial').AsInteger :=
+        retornaCodigo(cbClienteInicial);
+      qryPedidos.Params.ParamByName('pClienteFinal').AsInteger :=
+        retornaCodigo(cbClienteFinal);
+    end;
+
+    qryPedidos.Open;
+    qryPedidos.First;
+
+    if qryPedidos.RecordCount = 0 then
+    begin
+      showMessage('Nenhuma pedido foi encontrado.');
+      exit;
+    end;
+    while not(qryPedidos.Eof) do
+    begin
+      qryItens.Close;
+      qryItens.SQL.Clear;
+      qryItens.SQL.Text :=
+        'SELECT i2.DESCRICAO, i.QUANTIDADE, i.VALORUNITARIO, i.VALORTOTALITEM '
+        + ' FROM ITENSPEDIDOS i LEFT JOIN ITENS i2 ON i2.CODIGO = i.ITEMID ' +
+        ' WHERE I.CODIGOPEDIDO = :pCodigoPedido';
+      qryItens.Params.ParamByName('pCodigoPedido').AsInteger :=
+        qryPedidos.FieldByName('CODIGOPEDIDO').AsInteger;
+      qryItens.Open;
+      qryItens.First;
+
+      if qryItens.RecordCount = 0 then
+      begin
+        frxPedido.FindObject('Header1').Visible := false;
+        frxPedido.FindObject('Footer1').Visible := false;
+        frxPedido.FindObject('MasterData1').Visible := false;
+        frxPedido.FindObject('PageHeader1').Visible := true;
+      end
+      else
+      begin
+        frxPedido.FindObject('PageHeader1').Visible := false;
+        frxPedido.FindObject('Header1').Visible := true;
+        frxPedido.FindObject('Footer1').Visible := true;
+        frxPedido.FindObject('MasterData1').Visible := true;
+        while not(qryItens.Eof) do
+        begin
+          memTableRel.Open;
+          memTableRel.EmptyDataSet;
+
+          memTableRel.Append;
+
+          memTableRel.FieldByName('DESCRICAO').AsString :=
+            qryItens.FieldByName('DESCRICAO').AsString;
+          memTableRel.FieldByName('QUANTIDADE').AsFloat :=
+            qryItens.FieldByName('QUANTIDADE').AsFloat;
+          memTableRel.FieldByName('VALORUNITARIO').AsCurrency :=
+            qryItens.FieldByName('VALORUNITARIO').AsCurrency;
+          memTableRel.FieldByName('VALORTOTALITEM').AsCurrency :=
+            qryItens.FieldByName('VALORTOTALITEM').AsCurrency;
+
+          memTableRel.Post;
+          qryItens.Next;
+        end;
+
+      end;
+
+      qryAux.Close;
+      qryAux.SQL.Clear;
+      qryAux.SQL.Add
+        ('SELECT p.EMISSAO, p.CODIGOPEDIDO, p.VALORTOTALPEDIDO, c.OBSERVACOES, c.NOME, c.TELEFONE, e.ENDERECO, e.BAIRRO, p.PREVISAOENTREGA, f.TIPOFRETE, f.VALORFRETE, c.PRECOPORKG '
+        + ' FROM PEDIDOS p LEFT JOIN CLIENTES c ON c.CODIGO = p.CLIENTEID ' +
+        ' LEFT JOIN ENDERECOS e ON e.CODIGOENDERECO = p.ENDERECOENTREGAID' +
+        ' LEFT JOIN FRETESPEDIDOS f ON f.CODIGOPEDIDO = p.CODIGOPEDIDO ' +
+        ' WHERE P.CODIGOPEDIDO = :pCodigoPedido');
+      qryAux.Params.ParamByName('pCodigoPedido').AsInteger :=
+        qryPedidos.FieldByName('CODIGOPEDIDO').AsInteger;
+      qryAux.Open;
+      qryAux.First;
+
+      frxPedido.Variables['dtaEmissao'] :=
+        QuotedStr(FormatDateTime('dd/MM/yyyy HH:mm',
+        qryAux.FieldByName('EMISSAO').AsDateTime));
+      frxPedido.Variables['codigoPedido'] :=
+        QuotedStr(qryAux.FieldByName('CODIGOPEDIDO').AsString);
+      frxPedido.Variables['totalPedido'] :=
+        QuotedStr(FormatFloat('R$#,##0.00',
+        qryAux.FieldByName('VALORTOTALPEDIDO').AsCurrency));
+      if Trim(qryAux.FieldByName('OBSERVACOES').AsString) = '' then
+      begin
+        frxPedido.Variables['observacaoCliente'] := QuotedStr('Nada consta');
+      end
+      else
+      begin
+        frxPedido.Variables['observacaoCliente'] :=
+          QuotedStr(qryAux.FieldByName('OBSERVACOES').AsString);
+      end;
+      frxPedido.Variables['nomeCliente'] :=
+        QuotedStr(qryAux.FieldByName('NOME').AsString);
+      frxPedido.Variables['telefoneCliente'] :=
+        QuotedStr(qryAux.FieldByName('TELEFONE').AsString);
+      frxPedido.Variables['enderecoCliente'] :=
+        QuotedStr(qryAux.FieldByName('ENDERECO').AsString);
+      frxPedido.Variables['bairroCliente'] :=
+        QuotedStr(qryAux.FieldByName('BAIRRO').AsString);
+      frxPedido.Variables['previsaoEntrega'] :=
+        QuotedStr(FormatDateTime('dd/MM/yyyy HH:mm',
+        qryAux.FieldByName('PREVISAOENTREGA').AsDateTime));
+      if (Trim(qryAux.FieldByName('TIPOFRETE').AsString) = '') then
+      begin
+        frxPedido.Variables['tipoFrete'] := QuotedStr('Nenhum');
+      end
+      else
+      begin
+        frxPedido.Variables['tipoFrete'] :=
+          QuotedStr(qryAux.FieldByName('TIPOFRETE').AsString);
+      end;
+      frxPedido.Variables['valorFrete'] :=
+        QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('VALORFRETE')
+        .AsCurrency));
+
+      frxPedido.Variables['observacaoPedido'] := QuotedStr('Nada consta');
+      frxPedido.Variables['valorTotalItens'] :=
+        QuotedStr(FormatFloat('R$#,##0.00',
+        qryAux.FieldByName('VALORTOTALPEDIDO').AsCurrency -
+        qryAux.FieldByName('VALORFRETE').AsCurrency));
+
+      if (qryItens.RecordCount = 0) then
+      begin
+        frxPedido.Variables['quantidadeKg'] :=
+          QuotedStr(FormatFloat('#,###0.000',
+          ((qryAux.FieldByName('VALORTOTALPEDIDO').AsCurrency) -
+          (qryAux.FieldByName('VALORFRETE').AsCurrency)) /
+          qryAux.FieldByName('PRECOPORKG').AsCurrency));
+        frxPedido.Variables['valorKg'] :=
+          QuotedStr(FormatFloat('R$#,##0.00', qryAux.FieldByName('PRECOPORKG')
+          .AsCurrency));
+
+      end;
+      frxPedido.PrepareReport(false);
+      qryPedidos.Next;
+    end;
+    frxPedido.ShowPreparedReport;
+  finally
+    qryAux.Free;
+    qryItens.Free;
+    qryPedidos.Free;
+  end;
+
+end;
+
+procedure TFrmRelatorioPedidos.chkDataEntregaClick(Sender: TObject);
+begin
+  dtEntregaInicial.Enabled := chkDataEntrega.Checked;
+  dtEntregaFinal.Enabled := chkDataEntrega.Checked;
+end;
+
+procedure TFrmRelatorioPedidos.FormShow(Sender: TObject);
+var
+  qryAux: TFDQuery;
+begin
+  dtEntregaInicial.DateTime := now;
+  dtEntregaFinal.DateTime := now;
+  dtEmissaoInicial.DateTime := now;
+  dtEmissaoFinal.DateTime := now;
+
+  qryAux := TFDQuery.Create(nil);
+  try
+    qryAux.Connection := DM.Conn;
+    qryAux.SQL.Text :=
+      'SELECT CODIGO, NOME FROM CLIENTES WHERE STATUS = ''Ativo''';
+    qryAux.Open;
+    qryAux.First;
+
+    if qryAux.RecordCount = 0 then
+    begin
+      raise Exception.Create('Cadastre ao menos uma entidade!');
+      ModalResult := mrCancel;
+    end;
+
+    cbClienteInicial.Items.Clear;
+    cbClienteFinal.Items.Clear;
+    cbClienteInicial.Items.Add('');
+    cbClienteFinal.Items.Add('');
+
+    while not(qryAux.Eof) do
+    begin
+      cbClienteInicial.Items.Add(qryAux.FieldByName('CODIGO').AsString + ' - ' +
+        qryAux.FieldByName('NOME').AsString);
+      cbClienteFinal.Items.Add(qryAux.FieldByName('CODIGO').AsString + ' - ' +
+        qryAux.FieldByName('NOME').AsString);
+      qryAux.Next;
+    end;
+  finally
+    qryAux.Free;
+  end;
+
+end;
+
+end.

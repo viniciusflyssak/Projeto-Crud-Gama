@@ -133,6 +133,10 @@
             <Form>FrmGerenciamentoPedidos</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="uFrmRelatorioPedidos.pas">
+            <Form>FrmRelatorioPedidos</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

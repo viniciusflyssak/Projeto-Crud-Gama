@@ -162,7 +162,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
+      TabOrder = 2
       OnSelect = cbEnderecoSelect
     end
     object cbCliente: TComboBox
@@ -180,7 +180,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 2
+      TabOrder = 1
       OnSelect = cbClienteSelect
     end
     object cbStatus: TComboBox
@@ -201,7 +201,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 3
+      TabOrder = 5
       Text = 'Aberto'
       Items.Strings = (
         'Aberto'
@@ -222,7 +222,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 4
+      TabOrder = 6
     end
     object dtPrevisaoEntrega: TDateTimePicker
       Left = 200
@@ -242,7 +242,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 5
+      TabOrder = 4
     end
     object dtEmissao: TDateTimePicker
       Left = 8
@@ -262,7 +262,7 @@ object FrmEmitirPedido: TFrmEmitirPedido
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 6
+      TabOrder = 3
     end
   end
   object gbItens: TGroupBox
