@@ -11,7 +11,8 @@ uses
   uFrmCadastroItens in 'uFrmCadastroItens.pas' {FrmCadastroItens},
   uFrmGerenciamentoItens in 'uFrmGerenciamentoItens.pas' {FrmGerenciamentoItens},
   uFrmConfiguracaoFrete in 'uFrmConfiguracaoFrete.pas' {FrmConfiguracaoFrete},
-  uFrmEmitirPedido in 'uFrmEmitirPedido.pas' {FrmEmitirPedido};
+  uFrmEmitirPedido in 'uFrmEmitirPedido.pas' {FrmEmitirPedido},
+  uFrmGerenciamentoPedidos in 'uFrmGerenciamentoPedidos.pas' {FrmGerenciamentoPedidos};
 
 {$R *.res}
 
@@ -26,5 +27,6 @@ begin
   Application.CreateForm(TFrmGerenciamentoItens, FrmGerenciamentoItens);
   Application.CreateForm(TFrmConfiguracaoFrete, FrmConfiguracaoFrete);
   Application.CreateForm(TFrmEmitirPedido, FrmEmitirPedido);
+  Application.CreateForm(TFrmGerenciamentoPedidos, FrmGerenciamentoPedidos);
   Application.Run;
 end.

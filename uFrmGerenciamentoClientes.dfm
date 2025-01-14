@@ -23,21 +23,21 @@ object FrmGerenciamentoClientes: TFrmGerenciamentoClientes
     Align = alBottom
     TabOrder = 0
     ExplicitTop = 400
-    ExplicitWidth = 624
-    object btnCancelar: TSpeedButton
+    ExplicitWidth = 654
+    object btnFechar: TSpeedButton
       Left = 1
       Top = 1
       Width = 102
       Height = 39
       Align = alLeft
-      Caption = 'Cancelar'
+      Caption = 'Fechar'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -16
       Font.Name = 'Arial'
       Font.Style = [fsBold]
       ParentFont = False
-      OnClick = btnCancelarClick
+      OnClick = btnFecharClick
       ExplicitLeft = 688
       ExplicitTop = 8
       ExplicitHeight = 25

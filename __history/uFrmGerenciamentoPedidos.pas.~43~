@@ -1,0 +1,118 @@
+unit uFrmGerenciamentoPedidos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, Vcl.Buttons, Vcl.ExtCtrls,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Grids, Vcl.DBGrids,
+  FireDAC.DApt, uDM,
+  FireDAC.Stan.Async, System.UITypes;
+
+type
+  TFrmGerenciamentoPedidos = class(TForm)
+    grdPedidos: TDBGrid;
+    mtPedidos: TFDMemTable;
+    mtPedidosCODIGO: TIntegerField;
+    pnlBotoes: TPanel;
+    btnFechar: TSpeedButton;
+    btnReimprimir: TSpeedButton;
+    btnCancelar: TSpeedButton;
+    dsPedidos: TDataSource;
+    qryCarregarPedidos: TFDQuery;
+    mtPedidosVALORTOTALPEDIDO: TCurrencyField;
+    mtPedidosEMISSAO: TStringField;
+    mtPedidosNOME: TStringField;
+    mtPedidosSTATUS: TStringField;
+    procedure FormShow(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmGerenciamentoPedidos: TFrmGerenciamentoPedidos;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmGerenciamentoPedidos.btnCancelarClick(Sender: TObject);
+var
+  qryAux: TFDQuery;
+  confirmacao: Integer;
+begin
+  if not(mtPedidos.FieldByName('CODIGO').AsInteger > 0) then
+  begin
+    raise Exception.Create('Selecione ao menos um pedido!');
+  end;
+
+  confirmacao := MessageDlg('Tem certeza que deseja cancelar este pedido?',
+    mtConfirmation, [mbYes, mbNo], 0);
+  if confirmacao = mrNo then
+    exit;
+
+  qryAux := TFDQuery.Create(nil);
+  try
+    qryAux.Connection := Dm.Conn;
+    Dm.Conn.StartTransaction;
+
+    try
+      qryAux.SQL.Text :=
+        'UPDATE PEDIDOS SET STATUS = :pStatus WHERE CODIGOPEDIDO = :pCodigoPedido';
+      qryAux.Params.ParamByName('pCodigoPedido').AsInteger :=
+        mtPedidos.FieldByName('CODIGO').AsInteger;
+      qryAux.Params.ParamByName('pStatus').AsString := 'Cancelado';
+      qryAux.ExecSQL;
+    except
+      Dm.Conn.Rollback;
+    end;
+    Dm.Conn.Commit;
+  finally
+    qryAux.Free;
+  end;
+  FormShow(Sender);
+end;
+
+procedure TFrmGerenciamentoPedidos.btnFecharClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
+end;
+
+procedure TFrmGerenciamentoPedidos.FormShow(Sender: TObject);
+begin
+  qryCarregarPedidos.Connection := Dm.Conn;
+  qryCarregarPedidos.Close;
+  qryCarregarPedidos.clea
+  qryCarregarPedidos.Open;
+  qryCarregarPedidos.First;
+
+  mtPedidos.Open;
+  mtPedidos.EmptyDataSet;
+
+  while not(qryCarregarPedidos.Eof) do
+  begin
+    mtPedidos.Append;
+    mtPedidos.FieldByName('CODIGO').AsInteger := qryCarregarPedidos.FieldByName
+      ('CODIGO').AsInteger;
+    mtPedidos.FieldByName('VALORTOTALPEDIDO').AsCurrency :=
+      qryCarregarPedidos.FieldByName('VALORTOTALPEDIDO').AsCurrency;
+    mtPedidos.FieldByName('STATUS').AsString := qryCarregarPedidos.FieldByName
+      ('STATUS').AsString;
+    mtPedidos.FieldByName('NOME').AsString := qryCarregarPedidos.FieldByName
+      ('NOME').AsString;
+    mtPedidos.FieldByName('EMISSAO').AsString :=
+      FormatDateTime('dd/MM/yyyy HH:mm',
+      qryCarregarPedidos.FieldByName('EMISSAO').AsDateTime);
+    mtPedidos.Post;
+    qryCarregarPedidos.Next;
+  end;
+end;
+
+end.

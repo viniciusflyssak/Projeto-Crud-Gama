@@ -14,7 +14,7 @@ uses
 type
   TFrmGerenciamentoClientes = class(TForm)
     pnlBotoes: TPanel;
-    btnCancelar: TSpeedButton;
+    btnFechar: TSpeedButton;
     btnCadastrar: TSpeedButton;
     btnExcluir: TSpeedButton;
     grdClientes: TDBGrid;
@@ -26,7 +26,7 @@ type
     mtClientesTELEFONE: TStringField;
     mtClientesPRECOPORKG: TCurrencyField;
     SpeedButton1: TSpeedButton;
-    procedure btnCancelarClick(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
@@ -59,7 +59,7 @@ begin
   carregarClientes;
 end;
 
-procedure TFrmGerenciamentoClientes.btnCancelarClick(Sender: TObject);
+procedure TFrmGerenciamentoClientes.btnFecharClick(Sender: TObject);
 begin
   ModalResult := mrCancel;
 end;

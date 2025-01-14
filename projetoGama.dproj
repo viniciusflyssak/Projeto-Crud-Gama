@@ -129,6 +129,10 @@
             <Form>FrmEmitirPedido</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="uFrmGerenciamentoPedidos.pas">
+            <Form>FrmGerenciamentoPedidos</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
